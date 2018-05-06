@@ -19,7 +19,7 @@ namespace F.UnitTest
         }
 
         [Fact]
-        public void asb()
+        public void Map_can_be_synonym_for_Select()
         {
             // Arrange
             var xs  = Enumerable.Range(1, 3); 

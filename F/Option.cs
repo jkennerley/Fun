@@ -163,17 +163,19 @@ namespace Ef
         //public static Option<R> Map<T, R>
         //   (this Option.None _, Func<T, R> f)
         //   => None;
-        //
+        
         //public static Option<R> Map<T, R>
         //   (this Option.Some<T> some, Func<T, R> f)
         //   => Some(f(some.Value));
         //
-        //public static Option<R> Map<T, R>
-        //   (this Option<T> optT, Func<T, R> f)
-        //   => optT.Match(
-        //      () => None,
-        //      (t) => Some(f(t)));
-        //
+
+        // lifts fun returning string to Option<String>
+        public static Option<R> Map<T, R>
+           (this Option<T> optT, Func<T, R> f)
+           => optT.Match(
+              () => None,
+              (t) => Some(f(t)));
+        
         //public static Option<Func<T2, R>> Map<T1, T2, R>
         //   (this Option<T1> @this, Func<T1, T2, R> func)
         //    => @this.Map(func.Curry());

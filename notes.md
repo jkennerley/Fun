@@ -274,6 +274,5 @@ e.g.  a string field that was required becomes not required ;  put in Option<str
 	   - working at different levels of abstraction
 
 
-
-
-
+4.1. Select is more commonly Known as Map 
+  

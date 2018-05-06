@@ -4,6 +4,8 @@ using System.Linq;
 
 namespace Ef
 {
+    using static F;
+
     public static class EnumerableExt
     {
         public static IEnumerable<R> Map<T, R>(
@@ -13,5 +15,6 @@ namespace Ef
         {
             return ts.Select(f);
         }
+
     }
 }
