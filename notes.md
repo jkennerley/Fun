@@ -276,3 +276,16 @@ e.g.  a string field that was required becomes not required ;  put in Option<str
 
 4.1. Select is more commonly Known as Map 
   
+
+4.1.3
+  make pies, from bag, that may or may not contain pies
+
+
+4.1.4
+  Map appies a function to the inner value.
+  The set culd be a IE, Dictionary, Tree, ...
+  Map : ( C<T> , (T->R) ) -> C<R>
+   A Type that carries a Map is a **FUNCTOR**
+   The map fun should be a pure function, with no side effects
+
+4.2 ForEach, Side effect ...

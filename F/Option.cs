@@ -1,6 +1,6 @@
 ﻿using System;
 
-/*
+///*
 namespace Ef2
 {
     public static partial class F
@@ -52,7 +52,7 @@ namespace Ef2
         }
     }
 }
-*/
+//*/
 
 namespace Ef
 {
