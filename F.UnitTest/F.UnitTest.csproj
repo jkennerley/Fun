@@ -60,6 +60,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Chapter3\Age.cs" />
     <Compile Include="EnumerableExtUnitTest.cs" />
     <Compile Include="IntUnitTest.cs" />
     <Compile Include="NameValueCollectionExtUnitTest.cs" />

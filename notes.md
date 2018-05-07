@@ -289,3 +289,47 @@ e.g.  a string field that was required becomes not required ;  put in Option<str
    The map fun should be a pure function, with no side effects
 
 4.2 ForEach, Side effect ...
+
+
+4.3 Chaining Functions With Bind
+
+4.3.1 Combing Option retuirning functions
+  Option.Bind option<T> -> T->Option<R> -> Option<R> 
+
+  e.g. in the case of a string age to an Age
+    string -> int -> age
+	but each stage may fail...
+
+          :: Some(int)    :: Some(Age)  
+	"1"   -> 1            -> Age(1)
+	"X"   -> None         -> None
+	"160" -> 160          -> None
+
+4.3.2 -  flatten nested lists with Bind()... (it liske LINQ.SelectMany)
+4.3.3 - actually all this si called Monad ...
+  Bind :  ( C<T> , T-> C<R>  ) -> C<R>
+
+  So, Functor is a class that has Map
+  Monad is a class that has Bind (**monadic bind **)
+
+4.3. The Return function
+  Monads must have a Return function, 
+  that lifts a T into a C<T>.
+
+
+5.2.2 Writing Fun that compose Well
+  - Pure
+  - Chainable 
+  - General
+  - Shape-Preserving
+
+  Actions are dead-ends, so not chainable
+
+
+
+
+
+
+
+
+  
