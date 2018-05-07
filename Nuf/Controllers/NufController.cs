@@ -1,5 +1,4 @@
-﻿using System;
-using Ef;
+﻿using Ef;
 using System.Web.Mvc;
 using static Ef.F;
 
@@ -52,11 +51,9 @@ namespace Nuf.Controllers
             return Json(new { ok = false, rq = rq, rq_ = rq_, message = "IsValid rets option , so can be chained" }, JsonRequestBehavior.AllowGet);
         }
 
-
-
         /// <summary>
         /// handle the validation with an if
-        /// Problem : add 
+        /// Problem : add
         /// </summary>
         /// <param name="rq"></param>
         /// <returns></returns>
@@ -72,31 +69,27 @@ namespace Nuf.Controllers
             return Json(new { ok = false, rq = rq, rq_ = rq_, message = "IsValid rets option , controller fun ..." }, JsonRequestBehavior.AllowGet);
         }
 
-
         public Rq Normalise(Rq rq)
         {
-            if (rq !=null)
+            if (rq != null)
             {
                 rq.id = rq?.id?.Trim();
             }
 
             if (rq != null)
             {
-                rq.name= rq?.name?.Trim().ToUpper();
+                rq.name = rq?.name?.Trim().ToUpper();
             }
 
             return rq;
         }
 
-
-        void doit(  Rq rq  )
+        private void doit(Rq rq)
         {
-            /*var ret = */Bc.Doit(rq);
+            /*var ret = */
+            Bc.Doit(rq);
             //return ret;
         }
-
-
-
     }
 }
 
@@ -131,7 +124,6 @@ namespace Nuf.Controllers
     }
 }
 
-
 namespace Nuf.Controllers
 {
     public interface IBc<T>
@@ -142,7 +134,7 @@ namespace Nuf.Controllers
 
 namespace Nuf.Controllers
 {
-    public class Bc: IBc<Rq>
+    public class Bc : IBc<Rq>
     {
         public void Doit(Rq rq)
         {
