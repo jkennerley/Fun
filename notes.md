@@ -328,6 +328,57 @@ e.g.  a string field that was required becomes not required ;  put in Option<str
 
 
 
+5.3 Programming Workflows
+  - a meaningful seq.  of operations leading to a result 
+  - wfs can be modelled thru fun composition, each operation in the workflow can be performed by a function
+  - each operation can be performed by a function 
+  - those functions can be composed into pipelines
+  - 
+ 5.3.1 Simple workflow for validation
+  - e.g 
+     - Validate the transfer
+	 - Book a transfer
+	First doi twith an if
+
+5.3.2 MakeTransfer, but with extensions methods on option
+  Some(rq) // lift the transfer into an option
+   .Where( isValid) // send the option into the isValid function
+   .ForEach(  doit ) // make the apple pie, is the side effect
+
+   define a set of functions
+   , each step is a function in the workflow
+   , the composition  is the workflow
+
+
+5.4 Functional Domain Modelling
+  
+  See Account OOP style and FP style ...
+
+
+  5.5.3 Take on Layering ...
+  rigis and more prone to impurity ....
+   ->
+      -> 
+	    ->
+		<-
+	<-
+  <-
+
+  OR 
+   - more fliexible and  mid level cpts can be kept pure
+
+- Controller
+-- Validator
+---- Repo
+--- Account
+----- Repo
+------ Swift
+
+
+
+
+
+
 
 
 

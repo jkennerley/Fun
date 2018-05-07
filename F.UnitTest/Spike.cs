@@ -368,8 +368,67 @@ namespace F.UnitTest
         }
 
 
+        [Fact]
+        public void S54_Modelling_FP_vs_OOP()
+        {
+            // Arrange
+            var account = new AccountOOP(100);
+            // Act
+            account.Debit(50);
+            // Assert
+            Assert.Equal( 50 , account.Balance);
+        }
 
     }
+
+
+    public class AccountOOP
+    {
+        public decimal Balance { get; private set; }
+
+        public AccountOOP( decimal  balance)
+        {
+            this.Balance = balance;
+        }
+
+        public void Debit(decimal amount)
+        {
+            if(Balance < amount )
+                throw new InvalidOperationException("Insufficient funds");
+
+            Balance -= amount;
+        }
+    }
+
+
+    public class AccountState
+    {
+        public decimal Balance { get; }
+
+        public AccountState(decimal balance)
+        {
+            this.Balance = balance;
+        }
+    }
+
+    public static class AccountStateExt
+    {
+        //public static AccountState Debit( AccountState accountState, decimal  amount )
+        //{
+        //    return new AccountState(accountState.Balance - amount);
+        //}
+
+        public static Option<AccountState> Debit(AccountState acc, decimal amount)
+        =>
+                (acc.Balance < amount)
+                ? None
+                : Some(new AccountState(acc.Balance - amount));
+
+    }
+
+
+
+
 
     public class Person
     {

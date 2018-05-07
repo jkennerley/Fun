@@ -2,15 +2,24 @@
 using System.Web.Mvc;
 using static Ef.F;
 
-//using Ef.Option;
-
 namespace Nuf.Controllers
 {
     public class NufController : Controller
     {
         private readonly Validator validator = new Validator();
 
-        private readonly Bc Bc = new Bc();
+        private readonly IRepository<AccountState> repo;
+
+        private readonly ISwiftService swift;
+
+        private readonly Bc Bc;
+
+        public NufController()
+        {
+            this.Bc = new Bc();
+            this.repo = new AccountStateRepository();
+            this.swift = new Swift();
+        }
 
         [HttpGet]
         public JsonResult f0()
@@ -86,9 +95,23 @@ namespace Nuf.Controllers
 
         private void doit(Rq rq)
         {
-            /*var ret = */
-            Bc.Doit(rq);
-            //return ret;
+            //Bc.Doit(rq);
+            repo
+                .Get(rq.id)
+                .Bind(account => account.Debit(rq.transferAmount))
+                .ForEach(account =>
+                {
+                    // There are 2 statrements here ...
+                    // They have side-effects and its both-together ...
+                    // create single Task representing both ops, 
+                    // and have process that perfoms both
+                    // remove the task ONLY when both carried out
+                    // both ops may get performed more than once ...
+                    // => make provisions so  that both tasks are idempotent
+                    repo.Save(rq.id, account);
+                    swift.Wire(rq, account);
+                });
+
         }
     }
 }
@@ -99,6 +122,7 @@ namespace Nuf.Controllers
     {
         public string id { get; set; }
         public string name { get; set; }
+        public decimal transferAmount { get; set; }
     }
 }
 
@@ -145,6 +169,71 @@ namespace Nuf.Controllers
             // start the car
             // boil the kettle
             // launch the starship
+        }
+    }
+}
+
+namespace Nuf.Controllers
+{
+    public class AccountState
+    {
+        public decimal Balance { get; }
+
+        public AccountState(decimal balance)
+        {
+            this.Balance = balance;
+        }
+    }
+
+    public static class AccountStateExt
+    {
+        public static Option<AccountState> Debit(this AccountState acc, decimal amount)
+            =>
+                (acc.Balance < amount)
+                    ? None
+                    : Some(new AccountState(acc.Balance - amount));
+    }
+}
+
+namespace Nuf.Controllers
+{
+    public interface IRepository<T>
+    {
+        Option<T> Get(string id);
+
+        void Save(string id, T t);
+    }
+}
+
+namespace Nuf.Controllers
+{
+    public class AccountStateRepository : IRepository<AccountState>
+    {
+        public Option<AccountState> Get(string id)
+        {
+            return None;
+        }
+
+        public void Save(string id, AccountState t)
+        {
+        }
+    }
+}
+
+namespace Nuf.Controllers
+{
+    public interface ISwiftService
+    {
+        void Wire(Rq rq, AccountState acc);
+    }
+}
+
+namespace Nuf.Controllers
+{
+    public class Swift : ISwiftService
+    {
+        public void Wire(Rq rq, AccountState acc)
+        {
         }
     }
 }
