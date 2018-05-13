@@ -379,6 +379,84 @@ e.g.  a string field that was required becomes not required ;  put in Option<str
 
 
 
+6. Functional Error Handling
+
+Functional and imperative styles differ starkly wrt to error handling.
+
+Imperative : uses throw and try/catch, which disrupt normal flow
+
+Fun : 
+ strives to minimise side effects, so throwing exceptions is to be avoided
+ when a fun returns, it should return outcomne indicating success or fail
+ errors in fp are justg payload ...
+
+Problems, exception based approach.  Goto, jumps around just like throw does.  
+ So why abandon goto, but not throw.
+ When to use exceptions and when to use other techniques?
+
+ Fun approach leads to more clarity, byt making it explicit  fun can fail  via its signature.
+ How to make it explicit a function can fail through its signature.
+ Return types that indicate they may fail in their payload.
+ Errors can be consumed in the calling function.
+
+
+ Throw is mucjh worse than goto, since the quest is what code will execute Next?
+ Either the progrma will exit or there may or maynot be error handling at chnaging points up the call stack.
+
+6.1. Safe Outcomes.
+  Can use Option, to indicate success or not-success. 
+  But None carried no informatgion about the failure.
+  Some(x), indicated success, and None indicated fail
+
+  e.g.
+  parseNumber : String -> Option<Int>
+  lookup : Dictionary<int,int> , int -> option<int>
+  
+If there were several ways the operation could fail, 
+then client may need to be sent back richer information and so None is not sufficient.
+
+What went wrong?
+
+
+6.1.1. Capturing error details with Either.
+
+
+Either carries Left or Right. The most common way is to represent fail-left, success-right.
+
+Right-all-right ; Left-wrong.
+
+
+Option<T>   : None    | Some<T>
+Either<L,R> : Left(L) | Right<R>
+
+Either has 2 Generic params, which can be in one of 2 states
+Left(L), wraps the error
+Right(R), wraps succesfule result 
+
+FunShopkeeper : Req<spanner> -> Fail<Discontinued>
+EmpiricallShopkeeper : Req<spanner> -> Exception
+
+See the types Left<L>, Right<R>, and Either<L,R>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

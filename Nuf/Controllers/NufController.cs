@@ -45,7 +45,7 @@ namespace Nuf.Controllers
         }
 
         /// <summary>
-        /// handle the validation and bc side effect with some chaning rather than an if ...
+        /// handle the validation and bc side effect with some chaining rather than an if ...
         /// </summary>
         /// <param name="rq"></param>
         /// <returns></returns>
@@ -95,16 +95,15 @@ namespace Nuf.Controllers
 
         private void doit(Rq rq)
         {
-            //Bc.Doit(rq);
             repo
                 .Get(rq.id)
                 .Bind(account => account.Debit(rq.transferAmount))
                 .ForEach(account =>
                 {
-                    // There are 2 statrements here ...
+                    // There are 2 statements here ...
                     // They have side-effects and its both-together ...
                     // create single Task representing both ops, 
-                    // and have process that perfoms both
+                    // and have process that performs both
                     // remove the task ONLY when both carried out
                     // both ops may get performed more than once ...
                     // => make provisions so  that both tasks are idempotent

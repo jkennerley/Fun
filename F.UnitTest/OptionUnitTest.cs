@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Security.Authentication;
-using System.Text.RegularExpressions;
 using Xunit;
 using Xunit.Abstractions;
 
-//using Ef2; // exposes Option class, BUT not Ef2.Option{ None, Some }
-//using static Ef2.F;
-
-using Ef; // exposes Option class, BUT not Ef2.Option{ None, Some }
+using Ef; // exposes Option class, BUT not Ef.Option{ None, Some }
 using static Ef.F;
-
 
 namespace FUnitTest
 {
-
     public class OptionUnitTest
     {
         private readonly ITestOutputHelper output;
@@ -61,7 +54,7 @@ namespace FUnitTest
             // Arrange
 
             // Act
-            Exception ex = Assert.Throws<ArgumentNullException>(() =>Ef.F.Some(null as object));
+            Exception ex = Assert.Throws<ArgumentNullException>(() => Ef.F.Some(null as object));
 
             // Assert
             //Assert.True(ex.Message.Contains("Cannot wrap"));
@@ -95,10 +88,11 @@ namespace FUnitTest
         }
 
         [Fact]
-        public void lift_value_to_option(){
+        public void lift_value_to_option()
+        {
             // Arrange
 
-            string null_ = null as string ;
+            string null_ = null as string;
             Option<object> optionNull = null_;
 
             var o = new object();
@@ -112,7 +106,7 @@ namespace FUnitTest
             var actualValueNone = optionStringNone.Match(() => "NONE", v => v);
 
             // Assert
-            Assert.False(null_ is string) ;
+            Assert.False(null_ is string);
 
             Assert.True(actualValue == "John");
             Assert.True(actualValueNone == "NONE");
