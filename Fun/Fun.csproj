@@ -7,7 +7,7 @@
     <ProjectGuid>{99911480-25E3-407C-B1E4-DCF62212A143}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ef</RootNamespace>
+    <RootNamespace>Fun</RootNamespace>
     <AssemblyName>Ef</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -50,6 +50,7 @@
     <Compile Include="EitherExt.cs" />
     <Compile Include="Either.cs" />
     <Compile Include="EnumerableExt.cs" />
+    <Compile Include="Fun.ConnectionHelper.cs" />
     <Compile Include="int.cs" />
     <Compile Include="NameValueCollectionExt.cs" />
     <Compile Include="DictionaryExt.cs" />

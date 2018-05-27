@@ -1,35 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Security.Authentication;
 using System.Text.RegularExpressions;
 using Xunit;
 using Xunit.Abstractions;
 
-using Ef;
-using static Ef.F;
-using static Ef.NameValueCollectionExt;
+using Fun;
+using static Fun.F;
+using static Fun.DictionaryExt;
 
 namespace DictionaryExtUnitTest
 {
 
-    public class NameValueCollectionExtUnitTest
+    public class DictionaryUnitTest
     {
         private readonly ITestOutputHelper output;
 
-        public NameValueCollectionExtUnitTest(ITestOutputHelper output_)
+        public DictionaryUnitTest(ITestOutputHelper output_)
         {
             this.output = output_;
         }
 
         [Fact]
-        public void NameValueCollectionExt_lookup_to_OptionT()
+        public void dictionary_lookup_to_OptionT()
         {
             // Arrange
-            var xs = new NameValueCollection();
-
-            xs.Add("a", "AA");
-            xs.Add("b", "BB");
+            var xs = new Dictionary<string, string>
+            {
+                ["a"] = "AA",
+                ["b"] = "BB",
+            };
 
             // Act
 
@@ -40,14 +40,15 @@ namespace DictionaryExtUnitTest
             Assert.Equal("BB" , xs["b"]);
 
             // 
-            Assert.Equal(  None, xs.Lookup("-NOT-THERE"));
-            Assert.Equal(  Some("AA"), xs.Lookup("a"));
+            Assert.Equal( xs.Lookup("-NOT-THERE"), None);
+            Assert.Equal( xs.Lookup("a"), Some("AA"));
 
+            //
             var actualA = xs.Lookup("a").Match( () => "" , v => v);
             //Assert.Equal(actualA, "AA");
 
             var actualANotExist = xs.Lookup("a-key-there-").Match(() => "", v => v);
-            //Assert.Equal("" , actualANotExist);
+            //Assert.Equal(actualANotExist, "");
 
         }
 

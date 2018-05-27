@@ -89,10 +89,6 @@
     <Analyzer Include="..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\F\F.csproj">
-      <Project>{99911480-25e3-407c-b1e4-dcf62212a143}</Project>
-      <Name>F</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Nuf\Nuf.csproj">
       <Project>{b3716f8e-c404-4f30-a018-ccade6ce53d7}</Project>
       <Name>Nuf</Name>

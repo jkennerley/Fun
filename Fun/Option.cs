@@ -58,7 +58,7 @@ using Unit = System.ValueTuple;
 //}
 //*/
 
-namespace Ef
+namespace Fun
 {
     using static F;
 

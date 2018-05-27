@@ -1,6 +1,6 @@
-﻿using Ef;
+﻿using Fun;
 using System;
-using static Ef.F;
+using static Fun.F;
 
 public class Age
 {

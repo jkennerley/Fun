@@ -7,9 +7,9 @@ using Xunit.Abstractions;
 //using Ef2; // exposes Option class, BUT not Ef2.Option{ None, Some }
 //using static Ef2.F;
 
-using Ef; // exposes Option class, BUT not Ef2.Option{ None, Some }
-using static Ef.F;
-using static Ef.OptionExt;
+using Fun; // exposes Option class, BUT not Ef2.Option{ None, Some }
+using static Fun.F;
+using static Fun.OptionExt;
 
 
 namespace FUnitTest

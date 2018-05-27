@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ef
+namespace Fun
 {
     public static class String
     {

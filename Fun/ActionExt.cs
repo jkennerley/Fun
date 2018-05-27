@@ -1,10 +1,10 @@
 ﻿using System;
 using Unit = System.ValueTuple;
 
-using Ef;
-using static Ef.F;
+using Fun;
+using static Fun.F;
 
-namespace Ef
+namespace Fun
 {
     public static class ActionExt
     {

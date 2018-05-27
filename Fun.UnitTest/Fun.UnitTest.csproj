@@ -10,7 +10,7 @@
     <ProjectGuid>{61588FE8-E2A2-49E9-9A76-C3FAF7D6CAD9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>F.UnitTest</RootNamespace>
+    <RootNamespace>Fun.UnitTest</RootNamespace>
     <AssemblyName>F.UnitTest</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -78,9 +78,9 @@
     <Analyzer Include="..\packages\xunit.analyzers.0.7.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\F\F.csproj">
+    <ProjectReference Include="..\Fun\Fun.csproj">
       <Project>{99911480-25e3-407c-b1e4-dcf62212a143}</Project>
-      <Name>F</Name>
+      <Name>Fun</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

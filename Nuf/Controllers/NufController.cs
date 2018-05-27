@@ -1,6 +1,6 @@
-﻿using Ef;
+﻿using Fun;
 using System.Web.Mvc;
-using static Ef.F;
+using static Fun.F;
 
 namespace Nuf.Controllers
 {

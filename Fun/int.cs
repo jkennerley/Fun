@@ -1,4 +1,4 @@
-﻿namespace Ef
+﻿namespace Fun
 {
     using static F;
 

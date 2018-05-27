@@ -3,10 +3,11 @@ using Ef;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http.Headers;
+using Fun;
 using Xunit;
 using Xunit.Abstractions;
-using static Ef.F;
-using static Ef.String;
+using static Fun.F;
+using static Fun.String;
 
 //using static Ef.Option;
 

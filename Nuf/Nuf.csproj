@@ -209,9 +209,9 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\F\F.csproj">
+    <ProjectReference Include="..\Fun\Fun.csproj">
       <Project>{99911480-25e3-407c-b1e4-dcf62212a143}</Project>
-      <Name>F</Name>
+      <Name>Fun</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

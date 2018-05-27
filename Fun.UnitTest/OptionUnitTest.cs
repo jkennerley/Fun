@@ -2,8 +2,8 @@
 using Xunit;
 using Xunit.Abstractions;
 
-using Ef; // exposes Option class, BUT not Ef.Option{ None, Some }
-using static Ef.F;
+using Fun; // exposes Option class, BUT not Ef.Option{ None, Some }
+using static Fun.F;
 
 namespace FUnitTest
 {
@@ -54,7 +54,7 @@ namespace FUnitTest
             // Arrange
 
             // Act
-            Exception ex = Assert.Throws<ArgumentNullException>(() => Ef.F.Some(null as object));
+            Exception ex = Assert.Throws<ArgumentNullException>(() => Fun.F.Some(null as object));
 
             // Assert
             //Assert.True(ex.Message.Contains("Cannot wrap"));
