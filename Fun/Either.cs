@@ -66,7 +66,7 @@ namespace Fun
 
         public bool IsRight { get; }
 
-        public bool IsLeft => !IsRight;
+        //public bool IsLeft => !IsRight;
 
         internal Either(L left)
         {

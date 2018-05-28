@@ -73,10 +73,10 @@ namespace FunUnitTest
             Either<string, double> either = Left("oops");
 
             // Assert
-            Assert.True(eitherLifted.IsLeft);
+            Assert.True(!eitherLifted.IsRight);
             Assert.False(eitherLifted.IsRight);
 
-            Assert.True(either.IsLeft);
+            Assert.True(!either.IsRight);
             Assert.False(either.IsRight);
         }
 
@@ -90,10 +90,10 @@ namespace FunUnitTest
             Either<string, double> either = Right(12.0);
 
             // Assert
-            Assert.False(eitherLifted.IsLeft);
+            Assert.False(!eitherLifted.IsRight);
             Assert.True(eitherLifted.IsRight);
 
-            Assert.False(either.IsLeft);
+            Assert.False(!either.IsRight);
             Assert.True(either.IsRight);
         }
 
@@ -120,10 +120,10 @@ namespace FunUnitTest
             var rightEither = CreateEitherOfStringDouble(12.0);
 
             // Assert
-            Assert.True(leftEither.IsLeft);
+            Assert.True(!leftEither.IsRight);
             Assert.False(leftEither.IsRight);
 
-            Assert.False(rightEither.IsLeft);
+            Assert.False(!rightEither.IsRight);
             Assert.True(rightEither.IsRight);
         }
 
@@ -233,13 +233,13 @@ namespace FunUnitTest
             // Act
 
             // Assert
-            Assert.True(either1.IsLeft);
+            Assert.True(!either1.IsRight);
             // ... the left  is carrying info about the fail
             var render1 = either1.Match(l => $"{l}", r => $"{r}");
             Assert.Equal($@"y cannot be 0", render1);
 
             //
-            Assert.True(either2.IsLeft);
+            Assert.True(!either2.IsRight);
             // ... the left  is carrying info about the fail
             var render2 = either2.Match(l => $"{l}", r => $"{r}");
             Assert.Equal($@"x/y cannot be negative", render2);
@@ -252,7 +252,7 @@ namespace FunUnitTest
 
         #endregion either basics
 
-        #region exp 2
+        #region Either Outcomes to Client
 
         //[Fact]
         public void Either_comparing_with_render_should_expected()
@@ -273,7 +273,7 @@ namespace FunUnitTest
             Assert.Equal("right 1", renderingOfTheEither);
         }
 
-        [Fact]
+        //[Fact]
         public void Either_comparing_with_default_coamparer_should_expected()
         {
             // Arrange
@@ -288,6 +288,7 @@ namespace FunUnitTest
         }
 
         public class RenderEitherWithMatch
+
         {
             private ITestOutputHelper _output;
 
@@ -310,7 +311,7 @@ namespace FunUnitTest
             }
 
             [Fact]
-            public void render_left_either_should_yield_expected_lefty_value()
+            public void render_a_left_either_should_yield_expected_lefty_value_from_the_render_function()
             {
                 // Arrange
                 Either<string, int> either = ":-(";
@@ -318,15 +319,15 @@ namespace FunUnitTest
                 // Act
 
                 var rendered = Render(either);
+
                 // Assert
                 Assert.Contains(":-(", rendered);
             }
 
             [Fact]
-            public void render_right_either_should_yield_expected_righty_value()
+            public void render_a_right_either_should_yield_expected_righty_value_ffom_the_render_function()
             {
                 // Arrange
-
                 Either<string, int> either = 1;
 
                 // Act
@@ -344,13 +345,9 @@ namespace FunUnitTest
 
                 // Act
 
-                // this will convert an
-                //     Either<sting,int>
-                //  to
-                //    convert an Either<sting,double>
+                // this will convert an Either<sting,int> -to-> Either<sting,double>
                 var actual =
-                    either
-                    .Map(Convert.ToDouble);
+                    either.Map(Convert.ToDouble);
 
                 // Assert
                 Assert.Equal(2.0, actual);
@@ -364,89 +361,228 @@ namespace FunUnitTest
 
                 // Act
 
-                var actual = either
-                    .Map(Convert.ToDouble);
+                var actual =
+                    either.Map(Convert.ToDouble);
 
                 // Assert
                 Assert.Equal("sad-value :-(", actual);
             }
+        }
 
-            public class MakeToffeeApple
+        #endregion Either Outcomes to Client
+
+        #region ToffeeApple
+
+        public class ToffeeApple
+        {
+            private ITestOutputHelper _output;
+
+            public ToffeeApple(ITestOutputHelper o) =>
+                this._output = o;
+
+            public class Ingredients
             {
-                private ITestOutputHelper _output;
-
-                public MakeToffeeApple(ITestOutputHelper o) =>
-                    this._output = o;
-
-                public class Ingredients
-                {
-                    public string Apple;
-                }
-
-                public static bool validateAppleReq => true;
-
-                public static Either<string, Ingredients> validateBic(Ingredients ingredients)
-                {
-                    if (!ingredients.Apple.Contains("red-apple"))
-                    {
-                        return "not a red apple!";
-                    }
-
-                    return ingredients;
-                }
-                public static Either<string, Ingredients> normaliseBic(Ingredients ingredients)
-                {
-                    return  new Ingredients
-                    {
-                        Apple = ingredients.Apple.Trim()
-                    };
-                }
-
-                [Fact]
-                public void EitherMap_of_right_should_proint_right_value()
-                {
-                    // Arrange
-                    Either<string, Ingredients> either =
-                        new Ingredients
-                        {
-                            Apple = "  red-apple  "
-                        };
-
-                    // Act
-
-                    var productBag = either.
-                        Bind(validateBic).
-                        Bind(normaliseBic);
-
-                    // Assert
-                    var actualProductContent = productBag.Match(l => l, r => r.Apple);
-                    Assert.Equal("red-apple", actualProductContent);
-                }
-
-
-                [Fact]
-                public void EitherMap_of_left_should_proint_right_value()
-                {
-                    // Arrange
-                    Either<string, Ingredients> either =
-                        new Ingredients
-                        {
-                            Apple = "  green-apple  "
-                        };
-
-                    // Act
-
-                    var productBag = either.
-                        Bind(validateBic);
-
-                    // Assert
-                    var actualProductContent = productBag.Match(l => l, r => r.Apple);
-                    Assert.Equal("not a red apple!", actualProductContent);
-                }
-
+                public string Apple;
             }
 
-            #endregion exp 2
+            public static Either<string, Ingredients> Validate(Ingredients ingredients)
+            {
+                if (!ingredients.Apple.Contains("red-apple"))
+                {
+                    return "not a red apple!";
+                }
+
+                return ingredients;
+            }
+
+            public static Either<string, Ingredients> NormalisePrep(Ingredients ingredients)
+            {
+                return new Ingredients
+                {
+                    Apple = ingredients.Apple.Trim()
+                };
+            }
+
+            public static Either<string, Ingredients> AddToffee(Ingredients ingredients)
+            {
+                return new Ingredients
+                {
+                    Apple = $@"{ingredients.Apple};+toffee"
+                };
+            }
+
+            public static Either<string, Ingredients> Wrap(Ingredients ingredients)
+            {
+                return new Ingredients
+                {
+                    Apple = $@"{ingredients.Apple};+wrapping"
+                };
+            }
+
+            [Fact]
+            public void given_red_apple_when_validate_should_be_right()
+            {
+                // Arrange
+                Either<string, Ingredients> either =
+                    new Ingredients
+                    {
+                        Apple = "  red-apple  "
+                    };
+
+                // Act
+
+                var productBag =
+                    either.Bind(Validate);
+
+                // Assert
+
+                // should be OK
+                Assert.True(productBag.IsRight);
+                var actualProduct = productBag.Match(l => l, r => r.Apple);
+                Assert.Contains("red-apple", actualProduct);
+            }
+
+            [Fact]
+            public void given_red_apple_when_validate_and_NormalisePrep_should_be_right()
+            {
+                // Arrange
+                Either<string, Ingredients> either =
+                    new Ingredients { Apple = "  red-apple  " };
+
+                // Act
+
+                var product = either
+                        .Bind(Validate)
+                        .Bind(NormalisePrep)
+                        ;
+
+                // Assert
+
+                Assert.True(product.IsRight);
+
+                var actualProduct = product.Match(l => l, r => r.Apple);
+                Assert.Equal("red-apple", actualProduct);
+            }
+
+            [Fact]
+            public void given_red_apple_when_Validate_and_NormalisePrep_and_addToffee_should_be_right()
+            {
+                // Arrange
+                Either<string, Ingredients> either =
+                    new Ingredients { Apple = "  red-apple  " };
+
+                // Act
+
+                // sut call
+                var productBag = either
+                        .Bind(Validate)
+                        .Bind(NormalisePrep)
+                        .Bind(AddToffee)
+                        ;
+
+                // Assert
+
+                Assert.True(productBag.IsRight);
+
+                var actualProduct = productBag.Match(l => l, r => r.Apple);
+                Assert.Equal("red-apple;+toffee", actualProduct);
+            }
+
+            [Fact]
+            public void given_red_apple_when_Validate_and_NormalisePrep_and_addToffee_wrap_should_be_right()
+            {
+                // Arrange
+                Either<string, Ingredients> either =
+                    new Ingredients
+                    {
+                        Apple = "  red-apple  "
+                    };
+
+                // Act
+
+                var productBag = either
+                        .Bind(Validate)
+                        .Bind(NormalisePrep)
+                        .Bind(AddToffee)
+                        .Bind(Wrap)
+                        ;
+
+                // Assert
+                Assert.True(productBag.IsRight);
+
+                var actualProduct = productBag.Match(l => l, r => r.Apple);
+                Assert.Equal("red-apple;+toffee;+wrapping", actualProduct);
+            }
+
+            public class RenderMeta
+            {
+                public string Rendition { get; set; }
+                public int Code { get; set; }
+            }
+
+            [Fact]
+            public void given_red_apple_when_processed_can_be_consumed()
+            {
+                // Arrange
+                Either<string, Ingredients> ingredients =
+                    new Ingredients
+                    {
+                        Apple = "  red-apple  "
+                    };
+
+                var product =
+                    ingredients
+                    .Bind(Validate)
+                    .Bind(NormalisePrep)
+                    .Bind(AddToffee)
+                    .Bind(Wrap);
+
+                // Act
+
+                var rendering =
+                    product.Match(
+                        l => new RenderMeta { Code = 403, Rendition = l },
+                        r => new RenderMeta { Code = 200, Rendition = $@"{r.Apple};gobble" }
+                    );
+
+                // Assert
+                Assert.Equal(200, rendering.Code);
+                Assert.Equal("red-apple;+toffee;+wrapping;gobble", rendering.Rendition);
+            }
+
+            [Fact]
+            public void given_green_apple_when_processed_can_be_consumed()
+            {
+                // Arrange
+                Either<string, Ingredients> ingredients =
+                    new Ingredients
+                    {
+                        Apple = "  green-apple  "
+                    };
+
+                var product =
+                    ingredients
+                        .Bind(Validate)
+                        .Bind(NormalisePrep)
+                        .Bind(AddToffee)
+                        .Bind(Wrap);
+
+                // Act
+
+                var rendering =
+                    product.Match(
+                        l => new RenderMeta { Code = 403, Rendition = l },
+                        r => new RenderMeta { Code = 200, Rendition = $@"{r.Apple};gobble" }
+                    );
+
+                // Assert
+
+                Assert.Equal(403, rendering.Code);
+                Assert.Equal("not a red apple!", rendering.Rendition);
+            }
+
         }
+
+        #endregion ToffeeApple
     }
 }
