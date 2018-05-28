@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace F.UnitTest
+namespace FunUnitTest
 {
     public class IntUnitTest
     {

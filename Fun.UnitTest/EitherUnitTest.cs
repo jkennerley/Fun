@@ -1,13 +1,16 @@
-﻿using Ef;
+﻿// exposes Option class, BUT not Ef.Option{ None, Some }
+
+using Fun;
 using System;
 using Xunit;
 using Xunit.Abstractions;
 
-// exposes Option class, BUT not Ef.Option{ None, Some }
-using static Fun.F;
+//using static Fun.Create;
+using static Fun.Create;
+
 //using Unit = System.ValueTuple;
 
-namespace F.UnitTest
+namespace FunUnitTest
 {
     public class EitherUnitTest
     {
@@ -18,265 +21,432 @@ namespace F.UnitTest
             this._output = o;
         }
 
-        #region exp 2
+        #region either basics
 
-        //public class EitherCreateUnitTest
-        //{
-        //    private ITestOutputHelper _output;
-        //
-        //    public EitherCreateUnitTest(ITestOutputHelper o) => this._output = o;
-        //
-        //    [Fact]
-        //    public Unit Either_create_Right_int()
-        //    {
-        //        // Arrange
-        //        // Act
-        //        var right = Right(1); // Ef.Either.Right()
-        //        // Assert
-        //        Assert.Equal(Right(1), right);
-        //        return Unit();
-        //    }
-        //
-        //    [Fact]
-        //    public void Either_create_Either_string_int()
-        //    {
-        //        // Arrange
-        //
-        //        // Act
-        //        Either<string, int> right_ = Right(1);
-        //
-        //        // Assert
-        //        Assert.Equal(Right(1), right_);
-        //    }
-        //}
-
-        //public class RenderEitherWithMatch
-        //{
-        //    private ITestOutputHelper _output;
-        //
-        //    public RenderEitherWithMatch(ITestOutputHelper o) => this._output = o;
-        //
-        //    public void RenderWithSide(Either<string, int> either)
-        //    {
-        //        either.Match(
-        //            l => this._output.WriteLine($" fail {l} "),
-        //            r => this._output.WriteLine($" success {r} ")
-        //        );
-        //    }
-        //
-        //    public static string Render(Either<string, int> either)
-        //    {
-        //        var ret = either.Match(
-        //            l => ($" fail {l} "),
-        //            r => ($" success {r} ")
-        //        );
-        //        return ret;
-        //    }
-        //
-        //    [Fact]
-        //    public void render_left_either_should_yield_expected_lefty_value()
-        //    {
-        //        // Arrange
-        //        Either<string, int> either = Left("oops");
-        //
-        //        // Act
-        //        var rendered = Render(either);
-        //
-        //        // Assert
-        //        Assert.Contains("oops", rendered);
-        //    }
-        //
-        //    [Fact]
-        //    public void render_right_either_should_yield_expected_righty_value()
-        //    {
-        //        // Arrange
-        //        Either<string, int> either = Right(1);
-        //        // Act
-        //        var rendered = Render(either);
-        //
-        //        // Assert
-        //        Assert.Contains("1", rendered);
-        //    }
-        //}
-
-        //public class EitherMap
-        //{
-        //    private ITestOutputHelper _output;
-        //
-        //    public EitherMap(ITestOutputHelper o) => this._output = o;
-        //
-        //    [Fact]
-        //    public void EitherMap_of_right_should_proint_right_value()
-        //    {
-        //        // Arrange
-        //        Either<string, int> req = Right(1);
-        //
-        //        // Act
-        //        var ac =
-        //            req
-        //                .Map(x => Convert.ToDouble(x));
-        //
-        //        // Assert
-        //        Assert.Equal(Right(1.0), ac);
-        //    }
-        //
-        //    [Fact]
-        //    public void EitherMap_of_left_should_print_left_value()
-        //    {
-        //        // Arrange
-        //        Either<string, int> req = Left("oops");
-        //
-        //        // Act
-        //        var ac =
-        //            req
-        //                .Map(Convert.ToDouble);
-        //
-        //        // Assert
-        //        Assert.Equal(Left("oops"), ac);
-        //    }
-        //
-        //}
-
-        //public class Either_Map_Apple_Validate_Normalise_Bake_Pack
-        //{
-            //private ITestOutputHelper _output;
-            //
-            //public Either_Map_Apple_Validate_Normalise_Bake_Pack(ITestOutputHelper o) => this._output = o;
-            //
-            //public class AppleReq
-            //{
-            //    public string Apple;
-            //}
-            //
-            //public static bool validateAppleReq => true;
-            ////public static Either<string,AppleReq>  validateAppleReqWithLift( Either<string, AppleReq> req ) => req.Match( l=> Left(l) , r =>    )                ;
-            //
-            //
-            //public static AppleReq normaliseAppleReq(AppleReq req)
-            //{
-            //    return new AppleReq {Apple = req.Apple.Trim()};
-            //}
-
-
-
-            //[Fact]
-            //public void EitherMap_of_right_should_proint_right_value()
-            //{
-            //    // Arrange
-            //    var appleReq = new AppleReq {Apple = "  green-apple  "};
-            //    var right = Right(appleReq);
-            //    Either<string, AppleReq> req = right;
-            //
-            //    // Act
-            //
-            //    //var ac =
-            //    //    req
-            //    //    .Where(x => validateAppleReq)
-            //    //    ;
-            //
-            //    // Assert
-            //    //Assert.Equal(Right(1.0), ac);
-            //}
-
-            //[Fact]
-            //public void EitherMap_of_left_should_print_left_value()
-            //{
-            //    // Arrange
-            //    Either<string, int> req = Left("oops");
-            //
-            //    // Act
-            //    var ac =
-            //        req
-            //            .Map(Convert.ToDouble);
-            //
-            //    // Assert
-            //    Assert.Equal(Left("oops"), ac);
-            //}
-
-        //}
-
-
-        #endregion exp 2
-
-
-        #region exp 1
-
-        [Fact]
-        public void Either_create_Left_string_create_Right_int()
+        ///[Fact]
+        public void Either_create_a_Left_string_should_tostring_expected()
         {
             // Arrange
-        
-            // calls static generic method Right inside of Ef.F
-            //var right = Right(12); // calls right<int>, creates a new struct Ef.Either.Right, and puts 12 in it
-        
-            //var left = Left("oops");
-        
-            // Act
-        
-            // Assert
-            _output.WriteLine($@"");
-        }
-        
-        //[Fact]
-        //public void Either_match()
-        //{
-        //    // Arrange
-        //
-        //    // calls Left<string>, creates a new struct Ef.Either.Left, and puts "oops" in it
-        //    var left_ = Left("oops");
-        //    Either<string, double> left = Left("oops");
-        //
-        //    // calls Right<int>, creates a new struct Ef.Either.Right, and puts 12 in it
-        //    var right_ = Right(12d);
-        //    Either<string, double> right = Right(12d);
-        //
-        //    string Render(Either<string, double> val) =>
-        //        val.Match(
-        //            l => $@"left {l}",
-        //            r => $@"right {r}"
-        //        );
-        //
-        //    var matchResultLeft = Render(left);
-        //    var matchResultRight = Render(right);
-        //
-        //    // Act
-        //
-        //    // Assert
-        //    _output.WriteLine($@"matchResultLeft : {matchResultLeft  }");
-        //    _output.WriteLine($@"matchResultRight : {matchResultRight }");
-        //}
-        
-        //private Either<string, double> Calc(double x, double y)
-        //{
-        //    if (y == 0)
-        //        return "y cannot be 0 ";
-        //
-        //    if (x != 0 && Math.Sign(x) != Math.Sign(y))
-        //        return "z/y cannot be negative ";
-        //
-        //    return Math.Sqrt(x / y);
-        //}
-        
-        //[Fact]
-        //public void Either_calc_with_demo_lifting()
-        //{
-        //    // Arrange
-        //
-        //    var ac1 = Calc(3, 0);
-        //    var ac2 = Calc(-3, 3);
-        //    var ac3 = Calc(-3, -3);
-        //
-        //    // Act
-        //    var ac1Ret = ac1.Match(l => $"{l}", r => $"{r}");
-        //    var ac2Ret = ac2.Match(l => $"{l}", r => $"{r}");
-        //    var ac3Ret = ac3.Match(l => $"{l}", r => $"{r}");
-        //
-        //    // Assert
-        //    _output.WriteLine($@"ac1: {ac1Ret  }");
-        //    _output.WriteLine($@"ac2: {ac2Ret  }");
-        //    _output.WriteLine($@"ac3: {ac3Ret  }");
-        //}
 
-        #endregion exp 1
+            // calls Fun.Create.Left<string>
+            //  -> Either.Left<string>
+            var left = Left("oops");
+
+            // Act
+
+            var actual = left.ToString();
+
+            //_output.WriteLine($@" left {actual}");
+
+            // Assert
+            Assert.Equal("Left(oops)", actual);
+        }
+
+        ///[Fact]
+        public void Either_create_a_Right_of_int__should_tostring_expected()
+        {
+            // Arrange
+
+            // calls Fun.Create.Right<string>
+            //  -> Either.Right<int>
+            var right = Right(12);
+
+            // Act
+
+            var actual = right.ToString();
+
+            //_output.WriteLine($@" right {actual}");
+
+            // Assert
+            Assert.Equal("Right(12)", actual);
+        }
+
+        //[Fact]
+        public void assign_left_value_to_eitherLR_should_cause_either_to_left_state()
+        {
+            // Arrange
+
+            // Act
+
+            // assign a Left value to a Either value,
+            Either<string, double> eitherLifted = "oops";
+            Either<string, double> either = Left("oops");
+
+            // Assert
+            Assert.True(eitherLifted.IsLeft);
+            Assert.False(eitherLifted.IsRight);
+
+            Assert.True(either.IsLeft);
+            Assert.False(either.IsRight);
+        }
+
+        //[Fact]
+        public void assign_right_value_to_eitherLR_should_cause_either_to_in_right_state()
+        {
+            // Arrange
+
+            // Act
+            Either<string, double> eitherLifted = 12.0;
+            Either<string, double> either = Right(12.0);
+
+            // Assert
+            Assert.False(eitherLifted.IsLeft);
+            Assert.True(eitherLifted.IsRight);
+
+            Assert.False(either.IsLeft);
+            Assert.True(either.IsRight);
+        }
+
+        public Either<string, double> CreateEitherOfStringDouble(double right)
+        {
+            Either<string, double> either = right;
+            return either;
+        }
+
+        public Either<string, double> CreateEitherOfStringDouble(string left)
+        {
+            Either<string, double> either = left;
+            return either;
+        }
+
+        //[Fact]
+        public void
+            with_biz_use_case_crreate_function_assignment_should_cause_either_to_in_expected_left_or_right_state()
+        {
+            // Arrange
+
+            // Act
+            var leftEither = CreateEitherOfStringDouble("oops");
+            var rightEither = CreateEitherOfStringDouble(12.0);
+
+            // Assert
+            Assert.True(leftEither.IsLeft);
+            Assert.False(leftEither.IsRight);
+
+            Assert.False(rightEither.IsLeft);
+            Assert.True(rightEither.IsRight);
+        }
+
+        // renders an either, via the  Match function
+        private string RenderToString(Either<string, double> _either) =>
+            _either.Match(
+                l => $@"left {l}",
+                r => $@"right {r}"
+            );
+
+        // renders an either, via the  Match function
+        private static string RenderToString(Either<string, int> e) =>
+            e.Match(
+                l => $@"left {l}",
+                r => $@"right {r}"
+            );
+
+        //[Fact]
+        public void a_left_either_when_matched_should_call_the_left_lambda()
+        {
+            // Arrange
+
+            // an either in the left state
+            Either<string, double> either = "oops";
+
+            // Act
+
+            // sut call : the match function is via the Render function
+            var renderingOfTheEither = RenderToString(either);
+
+            // Assert
+
+            // should have rendered oops here, because the either was in the left state
+            Assert.Equal("left oops", renderingOfTheEither);
+        }
+
+        //[Fact]
+        public void a_right_either_when_matched_should_call_the_right_lambda()
+        {
+            // Arrange
+
+            // an either in the left state
+            Either<string, double> either = 12.0;
+
+            // Act
+
+            // sut call : the match function is via the Render function
+            var renderingOfTheEither = RenderToString(either);
+
+            // Assert
+
+            // should have rendered oops here, because the either was in the left state
+            Assert.Equal("right 12", renderingOfTheEither);
+        }
+
+        /// <summary>
+        //// takes a double -> double
+        ////  returns Either<string,double>
+        //// if  y is zero              => then will be in left-fail state
+        //// if  x is zero & x,y have opposite signs => then will be in left-fail state
+        //// else happy path ... with returning Either in success state
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        private Either<string, double> Calc(double x, double y)
+        {
+            if (y == 0.0)
+            {
+                // return left-fail
+                return "y cannot be 0";
+            }
+
+            // if x not ZERO
+            // then  x and y should have the same sign
+            if (
+                x != 0.0
+                && Math.Sign(x) != Math.Sign(y)
+            )
+            {
+                // return fail-left
+                return "x/y cannot be negative";
+            }
+
+            // return Success
+            return Math.Sqrt(x / y);
+        }
+
+        //[Fact]
+        public void Either_calc_with_demo_lifting()
+        {
+            // Arrange
+
+            // y is zero so expect left-fail
+            var either1 = Calc(3, 0);
+
+            // x = y have different sign
+            var either2 = Calc(-3, 3);
+
+            // x = y have different sign
+            var either3 = Calc(0, 3);
+
+            // x = y have same sign, so => right-success
+            var either4 = Calc(-3, -3);
+            var either5 = Calc(3, 3);
+
+            // Act
+
+            // Assert
+            Assert.True(either1.IsLeft);
+            // ... the left  is carrying info about the fail
+            var render1 = either1.Match(l => $"{l}", r => $"{r}");
+            Assert.Equal($@"y cannot be 0", render1);
+
+            //
+            Assert.True(either2.IsLeft);
+            // ... the left  is carrying info about the fail
+            var render2 = either2.Match(l => $"{l}", r => $"{r}");
+            Assert.Equal($@"x/y cannot be negative", render2);
+            // ... the left  is carrying info about the fail
+
+            Assert.True(either3.IsRight);
+            Assert.True(either4.IsRight);
+            Assert.True(either5.IsRight);
+        }
+
+        #endregion either basics
+
+        #region exp 2
+
+        //[Fact]
+        public void Either_comparing_with_render_should_expected()
+        {
+            // Arrange
+
+            // an either in the left state
+            Either<string, int> either = 1;
+
+            // Act
+
+            // sut call : the match function is via the Render function
+            var renderingOfTheEither = RenderToString(either);
+
+            // Assert
+
+            // should have rendered oops here, because the either was in the left state
+            Assert.Equal("right 1", renderingOfTheEither);
+        }
+
+        [Fact]
+        public void Either_comparing_with_default_coamparer_should_expected()
+        {
+            // Arrange
+
+            // Act
+            Either<string, int> either = 1;
+
+            // Assert
+            Either<string, int> swappedToEither = 1;
+            Assert.Equal(swappedToEither, either);
+            //var isSame = ( swappedToEither == either);
+        }
+
+        public class RenderEitherWithMatch
+        {
+            private ITestOutputHelper _output;
+
+            public RenderEitherWithMatch(ITestOutputHelper o) => this._output = o;
+
+            //public void RenderWithSide(Either<string, int> either)
+            //{
+            //    either.Match(
+            //        l => this._output.WriteLine($" fail {l} "),
+            //        r => this._output.WriteLine($" success {r} ")
+            //    );
+            //}
+
+            public static string Render(Either<string, int> either)
+            {
+                return either.Match(
+                    l => ($" fail {l} "),
+                    r => ($" success {r} ")
+                );
+            }
+
+            [Fact]
+            public void render_left_either_should_yield_expected_lefty_value()
+            {
+                // Arrange
+                Either<string, int> either = ":-(";
+
+                // Act
+
+                var rendered = Render(either);
+                // Assert
+                Assert.Contains(":-(", rendered);
+            }
+
+            [Fact]
+            public void render_right_either_should_yield_expected_righty_value()
+            {
+                // Arrange
+
+                Either<string, int> either = 1;
+
+                // Act
+                var rendered = Render(either);
+
+                // Assert
+                Assert.Contains("1", rendered);
+            }
+
+            [Fact]
+            public void Either_Map_of_right_should_yield_expected_right_value()
+            {
+                // Arrange
+                Either<string, int> either = 2;
+
+                // Act
+
+                // this will convert an
+                //     Either<sting,int>
+                //  to
+                //    convert an Either<sting,double>
+                var actual =
+                    either
+                    .Map(Convert.ToDouble);
+
+                // Assert
+                Assert.Equal(2.0, actual);
+            }
+
+            [Fact]
+            public void EitherMap_of_left_should_print_left_value()
+            {
+                // Arrange
+                Either<string, int> either = "sad-value :-(";
+
+                // Act
+
+                var actual = either
+                    .Map(Convert.ToDouble);
+
+                // Assert
+                Assert.Equal("sad-value :-(", actual);
+            }
+
+            public class MakeToffeeApple
+            {
+                private ITestOutputHelper _output;
+
+                public MakeToffeeApple(ITestOutputHelper o) =>
+                    this._output = o;
+
+                public class Ingredients
+                {
+                    public string Apple;
+                }
+
+                public static bool validateAppleReq => true;
+
+                public static Either<string, Ingredients> validateBic(Ingredients ingredients)
+                {
+                    if (!ingredients.Apple.Contains("red-apple"))
+                    {
+                        return "not a red apple!";
+                    }
+
+                    return ingredients;
+                }
+                public static Either<string, Ingredients> normaliseBic(Ingredients ingredients)
+                {
+                    return  new Ingredients
+                    {
+                        Apple = ingredients.Apple.Trim()
+                    };
+                }
+
+                [Fact]
+                public void EitherMap_of_right_should_proint_right_value()
+                {
+                    // Arrange
+                    Either<string, Ingredients> either =
+                        new Ingredients
+                        {
+                            Apple = "  red-apple  "
+                        };
+
+                    // Act
+
+                    var productBag = either.
+                        Bind(validateBic).
+                        Bind(normaliseBic);
+
+                    // Assert
+                    var actualProductContent = productBag.Match(l => l, r => r.Apple);
+                    Assert.Equal("red-apple", actualProductContent);
+                }
+
+
+                [Fact]
+                public void EitherMap_of_left_should_proint_right_value()
+                {
+                    // Arrange
+                    Either<string, Ingredients> either =
+                        new Ingredients
+                        {
+                            Apple = "  green-apple  "
+                        };
+
+                    // Act
+
+                    var productBag = either.
+                        Bind(validateBic);
+
+                    // Assert
+                    var actualProductContent = productBag.Match(l => l, r => r.Apple);
+                    Assert.Equal("not a red apple!", actualProductContent);
+                }
+
+            }
+
+            #endregion exp 2
+        }
     }
 }

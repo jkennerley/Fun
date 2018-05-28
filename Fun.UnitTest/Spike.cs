@@ -11,7 +11,7 @@ using static Fun.String;
 
 //using static Ef.Option;
 
-namespace F.UnitTest
+namespace FunUnitTest
 {
     public class SpikeUnitTest
     {

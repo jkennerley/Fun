@@ -7,7 +7,7 @@ using Ef;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace F.UnitTest
+namespace FunUnitTest
 {
     public class EnumerableExtUnitTest
     {

@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Fun; // exposes Option class, BUT not Ef.Option{ None, Some }
+using System;
 using Xunit;
 using Xunit.Abstractions;
-
-using Fun; // exposes Option class, BUT not Ef.Option{ None, Some }
 using static Fun.F;
 
-namespace FUnitTest
+namespace FunUnitTest
 {
     public class OptionUnitTest
     {

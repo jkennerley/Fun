@@ -12,7 +12,7 @@ using static Fun.F;
 using static Fun.OptionExt;
 
 
-namespace FUnitTest
+namespace FunUnitTest
 {
 
     public class OptionExtUnitTest
