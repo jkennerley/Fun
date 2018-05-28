@@ -97,7 +97,7 @@ namespace Fun
 
         // Match, calls the left-fun() if the either is in the left state, or calls the right-fun() if in the right state
         public TR Match<TR>(Func<L, TR> leftFun, Func<R, TR> rightFun)
-            => this.IsLeft ? leftFun(this.Left) : rightFun(this.Right);
+            => !this.IsRight? leftFun(this.Left) : rightFun(this.Right);
 
         //public Unit Match(Action<L> Left, Action<R> Right) => Match(Left.ToFunc(), Right.ToFunc());
 

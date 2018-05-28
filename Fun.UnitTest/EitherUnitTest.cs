@@ -1,11 +1,7 @@
-﻿// exposes Option class, BUT not Ef.Option{ None, Some }
-
-using Fun;
+﻿using Fun;
 using System;
 using Xunit;
 using Xunit.Abstractions;
-
-//using static Fun.Create;
 using static Fun.Create;
 
 //using Unit = System.ValueTuple;
@@ -21,9 +17,9 @@ namespace FunUnitTest
             this._output = o;
         }
 
-        #region either basics
+        #region Either Associated Core Functions
 
-        ///[Fact]
+        [Fact]
         public void Either_create_a_Left_string_should_tostring_expected()
         {
             // Arrange
@@ -42,7 +38,7 @@ namespace FunUnitTest
             Assert.Equal("Left(oops)", actual);
         }
 
-        ///[Fact]
+        [Fact]
         public void Either_create_a_Right_of_int__should_tostring_expected()
         {
             // Arrange
@@ -61,7 +57,7 @@ namespace FunUnitTest
             Assert.Equal("Right(12)", actual);
         }
 
-        //[Fact]
+        [Fact]
         public void assign_left_value_to_eitherLR_should_cause_either_to_left_state()
         {
             // Arrange
@@ -80,7 +76,7 @@ namespace FunUnitTest
             Assert.False(either.IsRight);
         }
 
-        //[Fact]
+        [Fact]
         public void assign_right_value_to_eitherLR_should_cause_either_to_in_right_state()
         {
             // Arrange
@@ -109,7 +105,7 @@ namespace FunUnitTest
             return either;
         }
 
-        //[Fact]
+        [Fact]
         public void
             with_biz_use_case_crreate_function_assignment_should_cause_either_to_in_expected_left_or_right_state()
         {
@@ -141,7 +137,7 @@ namespace FunUnitTest
                 r => $@"right {r}"
             );
 
-        //[Fact]
+        [Fact]
         public void a_left_either_when_matched_should_call_the_left_lambda()
         {
             // Arrange
@@ -160,7 +156,7 @@ namespace FunUnitTest
             Assert.Equal("left oops", renderingOfTheEither);
         }
 
-        //[Fact]
+        [Fact]
         public void a_right_either_when_matched_should_call_the_right_lambda()
         {
             // Arrange
@@ -212,7 +208,7 @@ namespace FunUnitTest
             return Math.Sqrt(x / y);
         }
 
-        //[Fact]
+        [Fact]
         public void Either_calc_with_demo_lifting()
         {
             // Arrange
@@ -250,11 +246,11 @@ namespace FunUnitTest
             Assert.True(either5.IsRight);
         }
 
-        #endregion either basics
+        #endregion Either Associated Core Functions
 
         #region Either Outcomes to Client
 
-        //[Fact]
+        [Fact]
         public void Either_comparing_with_render_should_expected()
         {
             // Arrange
@@ -273,7 +269,7 @@ namespace FunUnitTest
             Assert.Equal("right 1", renderingOfTheEither);
         }
 
-        //[Fact]
+        [Fact]
         public void Either_comparing_with_default_coamparer_should_expected()
         {
             // Arrange
@@ -477,8 +473,7 @@ namespace FunUnitTest
                 var productBag = either
                         .Bind(Validate)
                         .Bind(NormalisePrep)
-                        .Bind(AddToffee)
-                        ;
+                        .Bind(AddToffee);
 
                 // Assert
 
@@ -504,8 +499,7 @@ namespace FunUnitTest
                         .Bind(Validate)
                         .Bind(NormalisePrep)
                         .Bind(AddToffee)
-                        .Bind(Wrap)
-                        ;
+                        .Bind(Wrap);
 
                 // Assert
                 Assert.True(productBag.IsRight);
@@ -580,7 +574,6 @@ namespace FunUnitTest
                 Assert.Equal(403, rendering.Code);
                 Assert.Equal("not a red apple!", rendering.Rendition);
             }
-
         }
 
         #endregion ToffeeApple
