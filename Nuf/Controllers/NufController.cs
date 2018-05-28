@@ -1,6 +1,10 @@
-﻿using Fun;
+﻿using Bc;
+using Fun;
+using NufUI;
 using System.Web.Mvc;
 using static Fun.F;
+
+//using NufBc;
 
 namespace Nuf.Controllers
 {
@@ -78,6 +82,49 @@ namespace Nuf.Controllers
             return Json(new { ok = false, rq = rq, rq_ = rq_, message = "IsValid rets option , controller fun ..." }, JsonRequestBehavior.AllowGet);
         }
 
+        /// <summary>
+        /// Problem : add
+        /// </summary>
+        /// <param name="rq"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public JsonResult toffeeApple(string apple)
+        {
+            // Arrange
+            Either<string, ToffeeAppleIngredients> ingredients =
+                new ToffeeAppleIngredients
+                {
+                    Apple = apple
+                };
+
+            var product =
+                ingredients
+                    .Bind(ToffeeAppleBc.Validate)
+                    .Bind(ToffeeAppleBc.NormalisePrep)
+                    .Bind(ToffeeAppleBc.AddToffee)
+                    .Bind(ToffeeAppleBc.Wrap);
+
+            var renderable = product
+                .Match(
+                    l => new RenderMeta { Code = 403, Rendition = l },
+                    r => new RenderMeta { Code = 200, Rendition = r.Apple }
+                );
+
+            return render(renderable);
+        }
+
+        public JsonResult render(RenderMeta renderMeta)
+        {
+            return Json(
+                new
+                {
+                    ok = renderMeta.Code == 200 ? true : false,
+                    code = renderMeta.Code,
+                    success = renderMeta.Code == 200 ? renderMeta : null,
+                    fail = renderMeta.Code != 200 ? renderMeta : null,
+                }, JsonRequestBehavior.AllowGet);
+        }
+
         public Rq Normalise(Rq rq)
         {
             if (rq != null)
@@ -102,7 +149,7 @@ namespace Nuf.Controllers
                 {
                     // There are 2 statements here ...
                     // They have side-effects and its both-together ...
-                    // create single Task representing both ops, 
+                    // create single Task representing both ops,
                     // and have process that performs both
                     // remove the task ONLY when both carried out
                     // both ops may get performed more than once ...
@@ -110,7 +157,6 @@ namespace Nuf.Controllers
                     repo.Save(rq.id, account);
                     swift.Wire(rq, account);
                 });
-
         }
     }
 }

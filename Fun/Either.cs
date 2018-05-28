@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using Unit = System.ValueTuple;
 
 namespace Fun
 {
@@ -54,7 +52,6 @@ namespace Fun
     //}
 }
 
-
 namespace Fun
 {
     // Either<L,R> struct
@@ -82,7 +79,6 @@ namespace Fun
             Left = default(L);
         }
 
-
         // copy constructor from lifted Either.Left.Value e.g.  Either<string, double> either = "oops";
         public static implicit operator Either<L, R>(L left) => new Either<L, R>(left);
 
@@ -92,12 +88,12 @@ namespace Fun
         // copy constructor from Either.Left e.g. Either<string, double> either = Left("oops");
         public static implicit operator Either<L, R>(Either.Left<L> left) => new Either<L, R>(left.Value);
 
-        // copy constructor from Either.Right.Value e.g. 
+        // copy constructor from Either.Right.Value e.g.
         public static implicit operator Either<L, R>(Either.Right<R> right) => new Either<L, R>(right.Value);
 
         // Match, calls the left-fun() if the either is in the left state, or calls the right-fun() if in the right state
         public TR Match<TR>(Func<L, TR> leftFun, Func<R, TR> rightFun)
-            => !this.IsRight? leftFun(this.Left) : rightFun(this.Right);
+            => !this.IsRight ? leftFun(this.Left) : rightFun(this.Right);
 
         //public Unit Match(Action<L> Left, Action<R> Right) => Match(Left.ToFunc(), Right.ToFunc());
 
@@ -107,6 +103,5 @@ namespace Fun
         //}
 
         //public override string ToString() => Match(l => $@"Left({l})", r => $"Right({r})");
-
     }
 }
