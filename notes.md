@@ -1,5 +1,3 @@
-
-
 Ch1
 
 Fun :
@@ -222,13 +220,9 @@ Cha2 Summary :
 3. Designing Function Signatures and Types 
  - 
 
+TODO :  why null is bad abd Option<T>is better
 
 
-
- TODO :  why null is bad abd Option<T>is better
-
-
- 
  3.4.2
  
  3.4.3 Implementing Option
@@ -437,28 +431,5 @@ FunShopkeeper : Req<spanner> -> Fail<Discontinued>
 EmpiricallShopkeeper : Req<spanner> -> Exception
 
 See the types Left<L>, Right<R>, and Either<L,R>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   

@@ -1,5 +1,4 @@
-﻿using Moq;
-using Nuf.Boc;
+﻿using Nuf.Boc;
 using System;
 using Xunit;
 using Xunit.Abstractions;
@@ -40,20 +39,20 @@ namespace Nuf.UnitTest
         [Theory]
         [InlineData("A", true)]
         [InlineData("B", false)]
-        public void bic_exists_valid_should_be_expected( string bic, bool expected)
+        public void bic_exists_valid_should_be_expected(string bic, bool expected)
         {
             // Arrange
-            string[] validCodes = {"A"};
+            string[] validCodes = { "A" };
 
-            var cmd = new MakeTransfer { Bic = bic};
+            var cmd = new MakeTransfer { Bic = bic };
 
-            var sut = new BicExistsValidator( () => validCodes);
+            var sut = new BicExistsValidator(() => validCodes);
 
             // Act
             var actual = sut.IsValid(cmd);
 
             // Assert
-            Assert.Equal( expected, actual  );
+            Assert.Equal(expected, actual);
         }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
-using Unit = System.ValueTuple;
-
-using Fun;
 using static Fun.F;
+using Unit = System.ValueTuple;
 
 namespace Fun
 {

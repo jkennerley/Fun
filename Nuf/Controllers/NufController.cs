@@ -1,10 +1,9 @@
-﻿using Bc;
-using Fun;
+﻿using Fun;
+using Nuf.Be;
 using NufUI;
 using System.Web.Mvc;
 using static Fun.F;
-
-//using NufBc;
+using static NufBc.ToffeeAppleBc;
 
 namespace Nuf.Controllers
 {
@@ -82,49 +81,6 @@ namespace Nuf.Controllers
             return Json(new { ok = false, rq = rq, rq_ = rq_, message = "IsValid rets option , controller fun ..." }, JsonRequestBehavior.AllowGet);
         }
 
-        /// <summary>
-        /// Problem : add
-        /// </summary>
-        /// <param name="rq"></param>
-        /// <returns></returns>
-        [HttpGet]
-        public JsonResult toffeeApple(string apple)
-        {
-            // Arrange
-            Either<string, ToffeeAppleIngredients> ingredients =
-                new ToffeeAppleIngredients
-                {
-                    Apple = apple
-                };
-
-            var product =
-                ingredients
-                    .Bind(ToffeeAppleBc.Validate)
-                    .Bind(ToffeeAppleBc.NormalisePrep)
-                    .Bind(ToffeeAppleBc.AddToffee)
-                    .Bind(ToffeeAppleBc.Wrap);
-
-            var renderable = product
-                .Match(
-                    l => new RenderMeta { Code = 403, Rendition = l },
-                    r => new RenderMeta { Code = 200, Rendition = r.Apple }
-                );
-
-            return render(renderable);
-        }
-
-        public JsonResult render(RenderMeta renderMeta)
-        {
-            return Json(
-                new
-                {
-                    ok = renderMeta.Code == 200 ? true : false,
-                    code = renderMeta.Code,
-                    success = renderMeta.Code == 200 ? renderMeta : null,
-                    fail = renderMeta.Code != 200 ? renderMeta : null,
-                }, JsonRequestBehavior.AllowGet);
-        }
-
         public Rq Normalise(Rq rq)
         {
             if (rq != null)
@@ -158,7 +114,146 @@ namespace Nuf.Controllers
                     swift.Wire(rq, account);
                 });
         }
+
+        public JsonResult JsonRender(RenderMeta renderMeta)
+        {
+            Response.StatusCode = renderMeta.Code;
+
+            switch (renderMeta.Code)
+            {
+                case 200:
+                    return Json(
+                        new
+                        {
+                            ok = true,
+                            code = renderMeta.Code,
+                            success = renderMeta,
+                        },
+                        JsonRequestBehavior.AllowGet);
+
+                case 403:
+                    return Json(
+                        new
+                        {
+                            ok = false,
+                            code = renderMeta.Code,
+                            fail = renderMeta,
+                        }, JsonRequestBehavior.AllowGet);
+
+                default:
+                    return Json(
+                        new
+                        {
+                            ok = false,
+                            code = renderMeta.Code,
+                        }, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        #region toffeeApple
+
+        private Either<string, Ingredients> CreateToffeeAppleRequest(string apple_)
+        {
+            Either<string, Ingredients> ingredients =
+                new Ingredients
+                {
+                    Apple =
+                        (
+                        string.IsNullOrWhiteSpace(apple_)
+                            ? ""
+                            : apple_
+                        )
+                };
+
+            return ingredients;
+        }
+
+        private Either<string, IngredientsCount> CreateToffeeAppleIngredientsCountRequest(string appleCount)
+        {
+            Either<string, IngredientsCount> ingredients =
+                new IngredientsCount
+                {
+                    AppleCount = appleCount
+                };
+
+            return ingredients;
+        }
+
+        [HttpGet]
+        public JsonResult toffeeApple(string apple)
+        =>
+            // render the result of the process request
+            JsonRender(
+                // process the request
+                CreateToffeeAppleRequest(apple)
+                    .Bind(Validate)
+                    .Bind(Prep)
+                    .Bind(AddToffee)
+                    .Bind(Wrap)
+                    //.Map()
+                    .Match(
+                        l => new RenderMeta { Code = 403, Rendition = l },
+                        r => new RenderMeta { Code = 200, Rendition = $@" {r.Apple}" }
+                    )
+            );
+
+        [HttpGet]
+        public JsonResult toffeeAppleFromAppleCount(string appleCount)
+            =>
+                // render the result of the process request
+                JsonRender(
+                    // process the request
+                    CreateToffeeAppleIngredientsCountRequest(appleCount)
+                        .Bind(Validate)
+                        .Bind(Prep)
+                        .Bind(AddToffee)
+                        .Bind(Wrap)
+                        .Match(
+                            l => new RenderMeta { Code = 403, Rendition = l },
+                            r => new RenderMeta { Code = 200, Rendition = $@" {r.AppleCount} ; {r.ApplesCount} " }
+                        )
+                );
+
+        [HttpGet]
+        public JsonResult toffeeAppleTwo(string apple)
+            =>
+                // extra HTML links?
+                // get canned pipeline?
+                // Add elements onto the pipeline?
+                // render the result of the process request
+                JsonRender(
+                    // process the request
+                    CreateToffeeAppleRequest(apple)
+                        .Bind(Validate)
+                        .Bind(Prep)
+                        .Bind(AddToffee)
+                        .Bind(Wrap)
+                        .Match(
+                            l => new RenderMeta { Code = 403, Rendition = l },
+                            r => new RenderMeta { Code = 200, Rendition = r.Apple }
+                        )
+                );
+
+        [HttpGet]
+        public JsonResult toffeeAppleProductFromAppleCount(string appleCount)
+            =>
+                // render the result of the process request
+                JsonRender(
+                    // process the request
+                    CreateToffeeAppleIngredientsCountRequest(appleCount)
+                        .Bind(Validate)
+                        .Bind(Prep)
+                        .Map(toToffeeAppleProduct)
+                        .Bind(AddToffee)
+                        .Bind(Wrap)
+                        .Match(
+                            l => new RenderMeta { Code = 403, Rendition = l },
+                            r => new RenderMeta { Code = 200, Rendition = $@" pipe = toffeeAppleProductFromAppleCount :: type={r.GetType().Name} :: ApplesCount={r.ApplesCount} :: ProductHistory={r.ProductHistory}" }
+                        )
+                );
     }
+
+    #endregion toffeeApple
 }
 
 namespace Nuf.Controllers

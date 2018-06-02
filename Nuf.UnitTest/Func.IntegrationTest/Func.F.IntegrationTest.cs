@@ -1,11 +1,5 @@
-﻿using Dapper;
-using System.Linq;
-using Xunit;
+﻿using Xunit;
 using Xunit.Abstractions;
-
-//using static Ef.ConnectionHelper;
-//using static Fun.ConnectionHelper;
-//using static Fun.;
 
 namespace Func.F
 {

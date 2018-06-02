@@ -9,4 +9,3 @@ namespace Fun
         public static Func<string, string> ToUpper = s => s.ToUpper();
     }
 }
-

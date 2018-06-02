@@ -1,4 +1,4 @@
-﻿using Fun; // exposes Option class, BUT not Ef.Option{ None, Some }
+﻿using Fun;
 using System;
 using Xunit;
 using Xunit.Abstractions;

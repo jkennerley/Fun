@@ -1,12 +1,13 @@
-﻿using Bc;
-using Fun;
+﻿using Fun;
+using Nuf.Be;
+using NufBc;
 using NufUI;
 using System;
 using Xunit;
 using Xunit.Abstractions;
 using static Fun.Create;
 
-//using Unit = System.ValueTuple;
+using static NufBc.ToffeeAppleBc;
 
 namespace FunUnitTest
 {
@@ -382,16 +383,14 @@ namespace FunUnitTest
             public void given_red_apple_when_validate_should_be_right()
             {
                 // Arrange
-                Either<string, ToffeeAppleIngredients> either =
-                    new ToffeeAppleIngredients
-                    {
-                        Apple = "  red-apple  "
-                    };
+                Either<string, Ingredients> either =
+                    new Ingredients { Apple = "  red-apple  " };
 
                 // Act
 
                 var productBag =
-                    either.Bind(ToffeeAppleBc.Validate);
+                    either
+                    .Bind(Validate);
 
                 // Assert
 
@@ -405,14 +404,14 @@ namespace FunUnitTest
             public void given_red_apple_when_validate_and_NormalisePrep_should_be_right()
             {
                 // Arrange
-                Either<string, ToffeeAppleIngredients> either =
-                    new ToffeeAppleIngredients { Apple = "  red-apple  " };
+                Either<string, Ingredients> either =
+                    new Ingredients { Apple = "  red-apple  " };
 
                 // Act
 
                 var product = either
-                    .Bind(ToffeeAppleBc.Validate)
-                    .Bind(ToffeeAppleBc.NormalisePrep);
+                    .Bind(Validate)
+                    .Bind(Prep);
 
                 // Assert
 
@@ -426,16 +425,17 @@ namespace FunUnitTest
             public void given_red_apple_when_Validate_and_NormalisePrep_and_addToffee_should_be_right()
             {
                 // Arrange
-                Either<string, ToffeeAppleIngredients> either =
-                    new ToffeeAppleIngredients { Apple = "  red-apple  " };
+                Either<string, Ingredients> either =
+                    new Ingredients { Apple = "  red-apple  " };
 
                 // Act
 
                 // sut call
-                var productBag = either
-                        .Bind(ToffeeAppleBc.Validate)
-                        .Bind(ToffeeAppleBc.NormalisePrep)
-                        .Bind(ToffeeAppleBc.AddToffee);
+                var productBag =
+                    either
+                    .Bind(ToffeeAppleBc.Validate)
+                    .Bind(ToffeeAppleBc.Prep)
+                    .Bind(ToffeeAppleBc.AddToffee);
 
                 // Assert
 
@@ -449,19 +449,20 @@ namespace FunUnitTest
             public void given_red_apple_when_Validate_and_NormalisePrep_and_addToffee_wrap_should_be_right()
             {
                 // Arrange
-                Either<string, ToffeeAppleIngredients> either =
-                    new ToffeeAppleIngredients
+                Either<string, Ingredients> either =
+                    new Ingredients
                     {
                         Apple = "  red-apple  "
                     };
 
                 // Act
 
-                var productBag = either
-                        .Bind(ToffeeAppleBc.Validate)
-                        .Bind(ToffeeAppleBc.NormalisePrep)
-                        .Bind(ToffeeAppleBc.AddToffee)
-                        .Bind(ToffeeAppleBc.Wrap);
+                var productBag =
+                    either
+                    .Bind(ToffeeAppleBc.Validate)
+                    .Bind(ToffeeAppleBc.Prep)
+                    .Bind(ToffeeAppleBc.AddToffee)
+                    .Bind(ToffeeAppleBc.Wrap);
 
                 // Assert
                 Assert.True(productBag.IsRight);
@@ -474,23 +475,24 @@ namespace FunUnitTest
             public void given_red_apple_when_processed_can_be_consumed()
             {
                 // Arrange
-                Either<string, ToffeeAppleIngredients> ingredients =
-                    new ToffeeAppleIngredients
+                Either<string, Ingredients> ingredients =
+                    new Ingredients
                     {
                         Apple = "  red-apple  "
                     };
 
                 var product =
                     ingredients
-                    .Bind(ToffeeAppleBc.Validate)
-                    .Bind(ToffeeAppleBc.NormalisePrep)
-                    .Bind(ToffeeAppleBc.AddToffee)
-                    .Bind(ToffeeAppleBc.Wrap);
+                    .Bind(Validate)
+                    .Bind(Prep)
+                    .Bind(AddToffee)
+                    .Bind(Wrap);
 
                 // Act
 
                 var rendering =
-                    product.Match(
+                    product
+                    .Match(
                         l => new RenderMeta { Code = 403, Rendition = l },
                         r => new RenderMeta { Code = 200, Rendition = $@"{r.Apple};gobble" }
                     );
@@ -504,18 +506,18 @@ namespace FunUnitTest
             public void given_green_apple_when_processed_can_be_consumed()
             {
                 // Arrange
-                Either<string, ToffeeAppleIngredients> ingredients =
-                    new ToffeeAppleIngredients
+                Either<string, Ingredients> ingredients =
+                    new Ingredients
                     {
                         Apple = "  green-apple  "
                     };
 
                 var product =
                     ingredients
-                        .Bind(ToffeeAppleBc.Validate)
-                        .Bind(ToffeeAppleBc.NormalisePrep)
-                        .Bind(ToffeeAppleBc.AddToffee)
-                        .Bind(ToffeeAppleBc.Wrap);
+                        .Bind(Validate)
+                        .Bind(Prep)
+                        .Bind(AddToffee)
+                        .Bind(Wrap);
 
                 // Act
 

@@ -1,26 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using Unit = System.ValueTuple;
 
-
-//using Fun.F;
 using static Fun.Create;
-
-using static Fun.F;
 
 namespace Fun
 {
-    using static F;
-
     public static class EitherExt
     {
         /// <summary>
-        /// Map : 
-        /// if the either (the 'this' ) is 
+        /// Map :
+        /// if the either (the 'this' ) is
         ///   in the left-sad state, then return a new Either in the left state
-        ///   ELSE 
-        ///     is in the right-happy state, then return a new Either in the right state, 
-        ///     and the right-happy-type of the either is the returning-type of the mapping-function 
+        ///   ELSE
+        ///     is in the right-happy state, then return a new Either in the right state,
+        ///     and the right-happy-type of the either is the returning-type of the mapping-function
         /// </summary>
         /// <typeparam name="L"></typeparam>
         /// <typeparam name="R"></typeparam>
@@ -33,14 +25,12 @@ namespace Fun
            => @thisEither.Match<Either<L, RR>>(
               l => Left(l),
               r => (mappingFun(r)));
-        
 
         //public static Either<LL, RR> Map<L, LL, R, RR>
         //   (this Either<L, R> @this, Func<L, LL> left, Func<R, RR> right)
         //   => @this.Match<Either<LL, RR>>(
         //      l => Left(left(l)),
         //      r => Right(right(r)));
-        
 
         //public static Either<L, Unit> ForEach<L, R>
         //   (this Either<L, R> @this, Action<R> act)
@@ -52,15 +42,13 @@ namespace Fun
            => @this.Match(
               l => Left(l),
               r => f(r));
-    
-    
+
         // LINQ
-    
-        //public static Either<L, R> Select<L, T, R>(this Either<L, T> @this
-        //   , Func<T, R> map) => @this.Map(map);
-    
-    
-       //public static Either<L, RR> SelectMany<L, T, R, RR>(this Either<L, T> @this
+
+        public static Either<L, R> Select<L, T, R>(this Either<L, T> @this
+           , Func<T, R> map) => @this.Map(map);
+
+        //public static Either<L, RR> SelectMany<L, T, R, RR>(this Either<L, T> @this
         //   , Func<T, Either<L, R>> bind, Func<T, R, RR> project)
         //   => @this.Match(
         //      Left: l => Left(l),
@@ -70,7 +58,6 @@ namespace Fun
         //            Right: r => project(t, r)));
     }
 }
-
 
 //public static class EitherExt
 //{

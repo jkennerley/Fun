@@ -1,15 +1,11 @@
-﻿using System;
-using Ef;
+﻿using Fun;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http.Headers;
-using Fun;
 using Xunit;
 using Xunit.Abstractions;
 using static Fun.F;
 using static Fun.String;
-
-//using static Ef.Option;
 
 namespace FunUnitTest
 {
@@ -326,10 +322,10 @@ namespace FunUnitTest
             // Arrange
 
             // person option
-            var population = 
-                Enumerable.Range(1,8)
-                .Select( x=>
-                    new Person{Earnings = x}
+            var population =
+                Enumerable.Range(1, 8)
+                .Select(x =>
+                   new Person { Earnings = x }
                 )
                 .ToList()
                 ;
@@ -357,17 +353,16 @@ namespace FunUnitTest
             //            )
             //            .ToList()
             //    ;
-            
+
             // Act
             //var avgEarningsOfRichestQuartile =
             //    population
             //        .RichestQuartile()
             //        .averageEarnings();
-            
+
             // Assert :
             //Assert.Equal(7.5m, avgEarningsOfRichestQuartile);
         }
-
 
         [Fact]
         public void S54_Modelling_FP_vs_OOP()
@@ -377,30 +372,27 @@ namespace FunUnitTest
             // Act
             account.Debit(50);
             // Assert
-            Assert.Equal( 50 , account.Balance);
+            Assert.Equal(50, account.Balance);
         }
-
     }
-
 
     public class AccountOOP
     {
         public decimal Balance { get; private set; }
 
-        public AccountOOP( decimal  balance)
+        public AccountOOP(decimal balance)
         {
             this.Balance = balance;
         }
 
         public void Debit(decimal amount)
         {
-            if(Balance < amount )
+            if (Balance < amount)
                 throw new InvalidOperationException("Insufficient funds");
 
             Balance -= amount;
         }
     }
-
 
     public class AccountState
     {
@@ -424,12 +416,7 @@ namespace FunUnitTest
                 (acc.Balance < amount)
                 ? None
                 : Some(new AccountState(acc.Balance - amount));
-
     }
-
-
-
-
 
     public class Person
     {
@@ -446,14 +433,11 @@ namespace FunUnitTest
 
         public static string AppendDomain(this string localPart) => $@"{localPart}@acme.com";
 
-        public static IEnumerable<Person> RichestQuartile 
-            (this List<Person> pop ) 
+        public static IEnumerable<Person> RichestQuartile
+            (this List<Person> pop)
             => pop.OrderByDescending(p => p.Earnings).Take(pop.Count / 4);
 
-        public static decimal averageEarnings (this IEnumerable<Person>  xs) =>
+        public static decimal averageEarnings(this IEnumerable<Person> xs) =>
             xs.Select(x => x.Earnings).Average();
-
-
-
     }
 }
