@@ -12,12 +12,6 @@ namespace NufUI
     }
 }
 
-namespace NufUI
-{
-    public static class RenderMetaExt
-    {
-    }
-}
 
 namespace Nuf.Be
 {

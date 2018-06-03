@@ -209,7 +209,7 @@ Pure Functions,
 
 
 
-Cha2 Summary : 
+S2 Summary : 
    - compared to math funs, programming functions are more difficult becuase they either depend on or create side-effect
    - side-effect : exception ; state mutation ; throwing exceptions ; 
    - functions withtou side effect are called pure ; 
@@ -217,7 +217,7 @@ Cha2 Summary :
    - I/O cannot be avoided, so to reduce foorprint, isolate it ...
    
 
-3. Designing Function Signatures and Types 
+S3 Designing Function Signatures and Types 
  - 
 
 TODO :  why null is bad abd Option<T>is better
@@ -415,7 +415,8 @@ What went wrong?
 6.1.1. Capturing error details with Either.
 
 
-Either carries Left or Right. The most common way is to represent fail-left, success-right.
+Either carries Left or Right. 
+The most common way is to represent fail-left, success-right.
 
 Right-all-right ; Left-wrong.
 
@@ -431,5 +432,4 @@ FunShopkeeper : Req<spanner> -> Fail<Discontinued>
 EmpiricallShopkeeper : Req<spanner> -> Exception
 
 See the types Left<L>, Right<R>, and Either<L,R>
-
   
