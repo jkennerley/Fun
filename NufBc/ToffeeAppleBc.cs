@@ -2,6 +2,11 @@
 using Nuf.Be;
 using System;
 
+using static Fun.F;
+
+using static NufBc.Errors;
+
+
 namespace NufUI
 {
     public class RenderMeta
@@ -21,6 +26,13 @@ namespace Nuf.Be
     }
 
     public class IngredientsCount
+    {
+        public string AppleCount;
+
+        public int ApplesCount;
+    }
+
+    public class IngredientsByCount
     {
         public string AppleCount;
 
@@ -73,6 +85,35 @@ namespace NufBc
             return ingredientsCount;
         }
 
+
+        public static Either<Error, IngredientsByCount> Validate(IngredientsByCount ingredients)
+        {
+            if (string.IsNullOrWhiteSpace(ingredients.AppleCount))
+            {
+                return AppleCountIsEmptyError();
+            }
+
+            try
+            {
+                var appleCount = Convert.ToInt32(ingredients.AppleCount.Trim());
+            }
+            catch
+            {
+                return AppleCountNaNError();
+            }
+
+            return ingredients;
+        }
+
+        public static Either<Error, IngredientsByCount> Prep(IngredientsByCount ingredients)
+        {
+            return new IngredientsByCount
+            {
+                AppleCount = ingredients.AppleCount.Trim(),
+                ApplesCount = Convert.ToInt32(ingredients.AppleCount.Trim())
+            };
+        }
+
         public static Either<string, Ingredients> Prep(Ingredients ingredients)
         {
             return new Ingredients
@@ -80,6 +121,7 @@ namespace NufBc
                 Apple = ingredients.Apple.Trim()
             };
         }
+
 
         public static Either<string, IngredientsCount> Prep(IngredientsCount ingredients)
         {
@@ -90,8 +132,16 @@ namespace NufBc
             };
         }
 
-        //public static Either<string, IngredientsInt> toIngredientsInt(IngredientsCount ingredients)
+
         public static ToffeeAppleProduct toToffeeAppleProduct(IngredientsCount ingredients)
+        {
+            return new ToffeeAppleProduct
+            {
+                ApplesCount = ingredients.ApplesCount,
+            };
+        }
+
+        public static ToffeeAppleProduct toProduct(IngredientsByCount ingredients)
         {
             return new ToffeeAppleProduct
             {
@@ -149,4 +199,28 @@ namespace NufBc
             };
         }
     }
+
+
+
+
 }
+namespace NufBc
+{
+    public static class Errors
+    {
+        public static AppleCountIsEmptyError AppleCountIsEmptyError() => new AppleCountIsEmptyError();
+        public static AppleCountNaNError AppleCountNaNError() => new AppleCountNaNError();
+    }
+
+    public sealed class AppleCountIsEmptyError : Error
+    {
+        public override string Message { get; }= $@"Apple Count Is Empty";
+    }
+
+    public sealed class AppleCountNaNError : Error
+    {
+        public override string Message { get; } = $@"Apple Count Is NaN";
+    }
+
+}
+

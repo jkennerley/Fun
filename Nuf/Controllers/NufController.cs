@@ -8,7 +8,49 @@ using static NufBc.ToffeeAppleBc;
 
 namespace Nuf.Controllers
 {
-    public class NufController : Controller
+    public class NufBaseController : Controller
+    {
+        public ActionResult NotFound(object o)
+        {
+            var code = 403;
+
+            var renderMeta =
+                new
+                {
+                    ok = code == 200,
+                    code,
+                    success = code == 200 ? o : null,
+                    fail = code == 200 ? null : o,
+                };
+
+            Response.StatusCode = code;
+
+            return Json(renderMeta, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Ok(object o)
+        {
+            var code = 200;
+
+            var renderMeta =
+                new
+                {
+                    ok = code == 200,
+                    code,
+                    success = code == 200 ? o : null,
+                    fail = code == 200 ? null : o,
+                };
+
+            Response.StatusCode = code;
+
+            return Json(renderMeta, JsonRequestBehavior.AllowGet);
+        }
+    }
+}
+
+namespace Nuf.Controllers
+{
+    public class NufController : NufBaseController
     {
         private readonly Validator validator = new Validator();
 
@@ -118,51 +160,70 @@ namespace Nuf.Controllers
 
         #region toffeeApple
 
-        private Either<string, IngredientsCount> CreateToffeeAppleIngredientsCountRequest(string appleCount)
-        {
-            Either<string, IngredientsCount> ingredients =
-                new IngredientsCount
-                {
-                    AppleCount = appleCount
-                };
-
-            return ingredients;
-        }
-
-        [HttpGet]
-        public JsonResult ToffeeApples(string appleCount)
-        =>
-            Json(
-                CreateToffeeAppleIngredientsCountRequest(appleCount)
-                    .Bind(Validate)
-                    .Bind(Prep)
-                    .Map(toToffeeAppleProduct)
-                    .Bind(AddToffee)
-                    .Bind(Wrap)
-                    .Match(
-                        l => new RenderMeta { Code = 403, Rendition = l },
-                        r => new RenderMeta { Code = 200, Rendition = $@" pipe = toffeeAppleProductFromAppleCount :: type={r.GetType().Name} :: ApplesCount={r.ApplesCount} :: ProductHistory={r.ProductHistory}" }
-                    )
-                    .SetResponseCode(Response)
-                , JsonRequestBehavior.AllowGet
-            );
-
         [HttpGet]
         public JsonResult ToffeeApple(string apple)
-        =>
-        // render the result of the process request
-        JsonRender(
-            // process the request
-            CreateToffeeAppleRequest(apple)
-                .Bind(Validate)
-                .Bind(Prep)
-                .Bind(AddToffee)
-                .Bind(Wrap)
-                .Match(
-                    l => new RenderMeta { Code = 403, Rendition = l },
-                    r => new RenderMeta { Code = 200, Rendition = $@" {r.Apple}" }
-                )
-        );
+            =>
+                // render the result of the process request
+                JsonRender(
+                    // process the request
+                    CreateToffeeAppleRequestForTextQ(apple)
+                        .Bind(Validate)
+                        .Bind(Prep)
+                        .Bind(AddToffee)
+                        .Bind(Wrap)
+                        .Match(
+                            l => new RenderMeta { Code = 403, Rendition = l },
+                            r => new RenderMeta { Code = 200, Rendition = $@" {r.Apple}" }
+                        )
+                );
+
+        [HttpGet]
+        public JsonResult ToffeeApples(string apples)
+            =>
+                Json(
+                    CreateToffeeAppleRequestForStringQ(apples)
+                        .Bind(Validate)
+                        .Bind(Prep)
+                        .Map(toToffeeAppleProduct)
+                        .Bind(AddToffee)
+                        .Bind(Wrap)
+                        .Match(
+                            l => new RenderMeta { Code = 403, Rendition = l },
+                            r => new RenderMeta { Code = 200, Rendition = $@" pipe = toffeeAppleProductFromAppleCount :: type={r.GetType().Name} :: ApplesCount={r.ApplesCount} :: ProductHistory={r.ProductHistory}" }
+                        )
+                        .SetResponseCode(Response)
+                    , JsonRequestBehavior.AllowGet
+                );
+
+        //[HttpGet]
+        //public JsonResult ToffeeApplesWithError(string apples)
+        //    =>
+        //        Json(
+        //            CreateToffeeAppleRequest(apples)
+        //                .Bind(Validate)
+        //                .Bind(Prep)
+        //                .Map(toProduct)
+        //                //.Bind(AddToffee)
+        //                //.Bind(Wrap)
+        //                .Match(
+        //                    l => new RenderMeta { Code = 403, Rendition = $@" type={l.GetType().Name} :: l.message={l.Message} :: " },
+        //                    r => new RenderMeta { Code = 200, Rendition = $@" type={r.GetType().Name} :: ApplesCount={r.ApplesCount} :: ProductHistory={r.ProductHistory}" }
+        //                )
+        //            //.SetResponseCode(Response)
+        //            , JsonRequestBehavior.AllowGet
+        //        );
+
+        [HttpGet]
+        public ActionResult ToffeeApplesWithError(string apples)
+            =>
+                CreateToffeeAppleRequest(apples)
+                    .Bind(Validate)
+                    .Bind(Prep)
+                    .Map(toProduct)
+                    .Match(
+                        NotFound
+                        , Ok
+                    );
 
         #endregion toffeeApple
 
@@ -184,7 +245,7 @@ namespace Nuf.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        private Either<string, Ingredients> CreateToffeeAppleRequest(string apple)
+        private Either<string, Ingredients> CreateToffeeAppleRequestForTextQ(string apple)
         {
             Either<string, Ingredients> ingredients =
                 new Ingredients
@@ -194,6 +255,28 @@ namespace Nuf.Controllers
                         ? ""
                         : apple
                 };
+            return ingredients;
+        }
+
+        private Either<string, IngredientsCount> CreateToffeeAppleRequestForStringQ(string appleCount)
+        {
+            Either<string, IngredientsCount> ingredients =
+                new IngredientsCount
+                {
+                    AppleCount = appleCount
+                };
+
+            return ingredients;
+        }
+
+        private Either<Error, IngredientsByCount> CreateToffeeAppleRequest(string appleCount)
+        {
+            Either<Error, IngredientsByCount> ingredients =
+                new IngredientsByCount
+                {
+                    AppleCount = appleCount
+                };
+
             return ingredients;
         }
 
