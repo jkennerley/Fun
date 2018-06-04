@@ -1,17 +1,12 @@
-﻿using System;
+﻿using Fun;
 using System.Collections.Generic;
-using System.Security.Authentication;
-using System.Text.RegularExpressions;
 using Xunit;
 using Xunit.Abstractions;
-
-using Ef;
-using static Ef.F;
-using static Ef.DictionaryExt;
+using static Fun.DictionaryExt;
+using static Fun.F;
 
 namespace DictionaryExtUnitTest
 {
-
     public class DictionaryUnitTest
     {
         private readonly ITestOutputHelper output;
@@ -36,21 +31,19 @@ namespace DictionaryExtUnitTest
             // Assert
 
             // the usual dictionary stuff
-            Assert.Equal("AA" , xs["a"]);
-            Assert.Equal("BB" , xs["b"]);
-
-            // 
-            Assert.Equal( xs.Lookup("-NOT-THERE"), None);
-            Assert.Equal( xs.Lookup("a"), Some("AA"));
+            Assert.Equal("AA", xs["a"]);
+            Assert.Equal("BB", xs["b"]);
 
             //
-            var actualA = xs.Lookup("a").Match( () => "" , v => v);
+            Assert.Equal(xs.Lookup("-NOT-THERE"), None);
+            Assert.Equal(xs.Lookup("a"), Some("AA"));
+
+            //
+            var actualA = xs.Lookup("a").Match(() => "", v => v);
             //Assert.Equal(actualA, "AA");
 
             var actualANotExist = xs.Lookup("a-key-there-").Match(() => "", v => v);
             //Assert.Equal(actualANotExist, "");
-
         }
-
     }
 }

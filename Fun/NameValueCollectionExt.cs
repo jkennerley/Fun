@@ -1,6 +1,6 @@
 ﻿using System.Collections.Specialized;
 
-namespace Ef
+namespace Fun
 {
     public static class NameValueCollectionExt
     {

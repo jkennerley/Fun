@@ -1,4 +1,4 @@
-﻿namespace Ef
+﻿namespace Fun
 {
     using static F;
 
@@ -10,10 +10,5 @@
             return int.TryParse(s, out result)
                 ? Some(result) : None;
         }
-
-        //public static bool IsOdd(int i) => i % 2 == 1;
-
-        //public static bool IsEven(int i) => i % 2 == 0;
     }
 }
-

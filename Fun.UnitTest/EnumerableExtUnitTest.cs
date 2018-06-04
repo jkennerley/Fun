@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿//using Ef;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Ef;
+using Fun;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace F.UnitTest
+namespace FunUnitTest
 {
     public class EnumerableExtUnitTest
     {
@@ -22,11 +19,11 @@ namespace F.UnitTest
         public void Map_can_be_synonym_for_Select()
         {
             // Arrange
-            var xs  = Enumerable.Range(1, 3); 
+            var xs = Enumerable.Range(1, 3);
 
             // Act
 
-            var ys =  
+            var ys =
                 xs
                 .Map(x => x * 3)
                 .ToList();
@@ -34,9 +31,8 @@ namespace F.UnitTest
             // Assert
             Assert.True(ys.Count() == 3);
             Assert.True(ys[0] == 3);
-            Assert.True(ys[1] == 2*3);
-            Assert.True(ys[2] == 3*3);
-
+            Assert.True(ys[1] == 2 * 3);
+            Assert.True(ys[2] == 3 * 3);
         }
     }
 }

@@ -208,6 +208,16 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fun\Fun.csproj">
+      <Project>{99911480-25e3-407c-b1e4-dcf62212a143}</Project>
+      <Name>Fun</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NufBc\NufBc.csproj">
+      <Project>{85742eca-2892-4615-a38a-ea6d1e7f1b5d}</Project>
+      <Name>NufBc</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

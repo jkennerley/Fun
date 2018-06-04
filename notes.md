@@ -1,5 +1,3 @@
-
-
 Ch1
 
 Fun :
@@ -211,7 +209,7 @@ Pure Functions,
 
 
 
-Cha2 Summary : 
+S2 Summary : 
    - compared to math funs, programming functions are more difficult becuase they either depend on or create side-effect
    - side-effect : exception ; state mutation ; throwing exceptions ; 
    - functions withtou side effect are called pure ; 
@@ -219,16 +217,12 @@ Cha2 Summary :
    - I/O cannot be avoided, so to reduce foorprint, isolate it ...
    
 
-3. Designing Function Signatures and Types 
+S3 Designing Function Signatures and Types 
  - 
 
+TODO :  why null is bad abd Option<T>is better
 
 
-
- TODO :  why null is bad abd Option<T>is better
-
-
- 
  3.4.2
  
  3.4.3 Implementing Option
@@ -289,3 +283,153 @@ e.g.  a string field that was required becomes not required ;  put in Option<str
    The map fun should be a pure function, with no side effects
 
 4.2 ForEach, Side effect ...
+
+
+4.3 Chaining Functions With Bind
+
+4.3.1 Combing Option retuirning functions
+  Option.Bind option<T> -> T->Option<R> -> Option<R> 
+
+  e.g. in the case of a string age to an Age
+    string -> int -> age
+	but each stage may fail...
+
+          :: Some(int)    :: Some(Age)  
+	"1"   -> 1            -> Age(1)
+	"X"   -> None         -> None
+	"160" -> 160          -> None
+
+4.3.2 -  flatten nested lists with Bind()... (it liske LINQ.SelectMany)
+4.3.3 - actually all this si called Monad ...
+  Bind :  ( C<T> , T-> C<R>  ) -> C<R>
+
+  So, Functor is a class that has Map
+  Monad is a class that has Bind (**monadic bind **)
+
+4.3. The Return function
+  Monads must have a Return function, 
+  that lifts a T into a C<T>.
+
+
+5.2.2 Writing Fun that compose Well
+  - Pure
+  - Chainable 
+  - General
+  - Shape-Preserving
+
+  Actions are dead-ends, so not chainable
+
+
+
+
+5.3 Programming Workflows
+  - a meaningful seq.  of operations leading to a result 
+  - wfs can be modelled thru fun composition, each operation in the workflow can be performed by a function
+  - each operation can be performed by a function 
+  - those functions can be composed into pipelines
+  - 
+ 5.3.1 Simple workflow for validation
+  - e.g 
+     - Validate the transfer
+	 - Book a transfer
+	First doi twith an if
+
+5.3.2 MakeTransfer, but with extensions methods on option
+  Some(rq) // lift the transfer into an option
+   .Where( isValid) // send the option into the isValid function
+   .ForEach(  doit ) // make the apple pie, is the side effect
+
+   define a set of functions
+   , each step is a function in the workflow
+   , the composition  is the workflow
+
+
+5.4 Functional Domain Modelling
+  
+  See Account OOP style and FP style ...
+
+
+  5.5.3 Take on Layering ...
+  rigis and more prone to impurity ....
+   ->
+      -> 
+	    ->
+		<-
+	<-
+  <-
+
+  OR 
+   - more fliexible and  mid level cpts can be kept pure
+
+- Controller
+-- Validator
+---- Repo
+--- Account
+----- Repo
+------ Swift
+
+
+
+
+
+
+6. Functional Error Handling
+
+Functional and imperative styles differ starkly wrt to error handling.
+
+Imperative : uses throw and try/catch, which disrupt normal flow
+
+Fun : 
+ strives to minimise side effects, so throwing exceptions is to be avoided
+ when a fun returns, it should return outcomne indicating success or fail
+ errors in fp are justg payload ...
+
+Problems, exception based approach.  Goto, jumps around just like throw does.  
+ So why abandon goto, but not throw.
+ When to use exceptions and when to use other techniques?
+
+ Fun approach leads to more clarity, byt making it explicit  fun can fail  via its signature.
+ How to make it explicit a function can fail through its signature.
+ Return types that indicate they may fail in their payload.
+ Errors can be consumed in the calling function.
+
+
+ Throw is mucjh worse than goto, since the quest is what code will execute Next?
+ Either the progrma will exit or there may or maynot be error handling at chnaging points up the call stack.
+
+6.1. Safe Outcomes.
+  Can use Option, to indicate success or not-success. 
+  But None carried no informatgion about the failure.
+  Some(x), indicated success, and None indicated fail
+
+  e.g.
+  parseNumber : String -> Option<Int>
+  lookup : Dictionary<int,int> , int -> option<int>
+  
+If there were several ways the operation could fail, 
+then client may need to be sent back richer information and so None is not sufficient.
+
+What went wrong?
+
+
+6.1.1. Capturing error details with Either.
+
+
+Either carries Left or Right. 
+The most common way is to represent fail-left, success-right.
+
+Right-all-right ; Left-wrong.
+
+
+Option<T>   : None    | Some<T>
+Either<L,R> : Left(L) | Right<R>
+
+Either has 2 Generic params, which can be in one of 2 states
+Left(L), wraps the error
+Right(R), wraps succesfule result 
+
+FunShopkeeper : Req<spanner> -> Fail<Discontinued>
+EmpiricallShopkeeper : Req<spanner> -> Exception
+
+See the types Left<L>, Right<R>, and Either<L,R>
+  

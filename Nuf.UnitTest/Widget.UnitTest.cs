@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Xunit;
 
 using static System.Console;
 
@@ -79,7 +78,8 @@ namespace Nuf.UnitTest
 
             var documentViewModels = logic.GetDocumentsViewModel();// 7.515sec
 
-            documentViewModels.Documents.ForEach(document => {
+            documentViewModels.Documents.ForEach(document =>
+            {
                 var documentViewModel = logic.GetDocumentViewModel(document.DocumentId.Value);
             });
 
@@ -96,10 +96,10 @@ namespace Nuf.UnitTest
             // Act
             var documentViewModels = logic.GetDocumentsViewModel();//1.111sec
 
-            documentViewModels.Documents.ForEach(document =>{
+            documentViewModels.Documents.ForEach(document =>
+            {
                 var documentViewModel = logic.GetDocumentViewModel(document.DocumentId.Value);
             });
-
 
             //var doc = logic.GetDocumentViewModel(docs.Documents[0].DocumentId.Value);
 
@@ -150,7 +150,6 @@ namespace Nuf.UnitTest
 
         public Document DocumentById(Guid id)
         {
-
             if (TimeDelay) Thread.Sleep(500); // Pretend time penalty every time we query the database.  Not so severe when getting a single record.
 
             return GetTestData().FirstOrDefault(x => x.DocumentId == id);
@@ -193,7 +192,6 @@ namespace Nuf.UnitTest
                 }
                 else
                 {
-
                     return new DataLayerSimulator().DocumentById(PreviousDocumentId.GetValueOrDefault());
                 }
             }
@@ -252,7 +250,7 @@ namespace Nuf.UnitTest
     //    }
     //}
 
-    public  class NaiveLogic : ILogic
+    public class NaiveLogic : ILogic
     {
         // Use this when calculating date differences so that test code is simpler
         public DateTime DateToday => new DateTime(2018, 01, 20);
@@ -289,7 +287,7 @@ namespace Nuf.UnitTest
             // 1000ms
             var documentIds =
                 Data.Documents
-                .Where(x => x.Archived == false).Select(x =>new { x.DocumentId });
+                .Where(x => x.Archived == false).Select(x => new { x.DocumentId });
 
             var documentsViewModel = new DocumentsViewModel();
             foreach (var documentId in documentIds)
@@ -383,7 +381,7 @@ namespace Nuf.UnitTest
             // prefetch all documents
             var documents = Data.Documents;//1sec
 
-            var documentIds = 
+            var documentIds =
                 documents
                 .Where(x => x.Archived == false).Select(x => new { x.DocumentId });
 
@@ -392,7 +390,7 @@ namespace Nuf.UnitTest
 
             foreach (var id in documentIds)// 78ms
             {
-                var documentId  = id.DocumentId.GetValueOrDefault();
+                var documentId = id.DocumentId.GetValueOrDefault();
 
                 // get document view model using pre-fetched documents
                 var documentViewModel = GetDocumentViewModel(documentId, documents);

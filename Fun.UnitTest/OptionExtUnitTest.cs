@@ -1,20 +1,11 @@
-﻿using System;
-using System.Security.Authentication;
-using System.Text.RegularExpressions;
+﻿using Fun;
+using System;
 using Xunit;
 using Xunit.Abstractions;
+using static Fun.F;
 
-//using Ef2; // exposes Option class, BUT not Ef2.Option{ None, Some }
-//using static Ef2.F;
-
-using Ef; // exposes Option class, BUT not Ef2.Option{ None, Some }
-using static Ef.F;
-using static Ef.OptionExt;
-
-
-namespace FUnitTest
+namespace FunUnitTest
 {
-
     public class OptionExtUnitTest
     {
         private readonly ITestOutputHelper output;
@@ -47,10 +38,11 @@ namespace FUnitTest
             Assert.Equal(Some("hello world jk"), ac2);
         }
 
+        public class Apple { }
 
-        public class Apple{}
-        public class Pie{}
-        Func<Apple, Pie> makePie  = (apple) => new Pie();
+        public class Pie { }
+
+        private Func<Apple, Pie> makePie = (apple) => new Pie();
 
         [Fact]
         public void if_non_empty_bag_of_apples_then_makepies_should_create_bag_of_apple_pies_else_no_pies()
@@ -60,7 +52,7 @@ namespace FUnitTest
 
             var appleBag1 = Some(apple);
 
-            Option<Apple> appleBag2 = None ;
+            Option<Apple> appleBag2 = None;
 
             // Act
             var pieBag1 = appleBag1.Map(makePie);
@@ -74,6 +66,4 @@ namespace FUnitTest
             Assert.Null(couldBePie2);
         }
     }
-
-
 }

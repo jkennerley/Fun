@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-//using System.Collections.Immutable;
 
-//namespace LaYumba.Functional
-namespace Ef
+namespace Fun
 {
     using static F;
 

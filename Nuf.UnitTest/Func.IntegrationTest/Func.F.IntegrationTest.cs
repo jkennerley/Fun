@@ -1,11 +1,5 @@
-﻿using Dapper;
-using System.Linq;
-using Xunit;
+﻿using Xunit;
 using Xunit.Abstractions;
-using static Ef.ConnectionHelper;
-
-
-//using Dapper;
 
 namespace Func.F
 {
@@ -26,19 +20,19 @@ namespace Func.F
         [Fact]
         public void Connect_should_get_data_for_simple_sql_select()
         {
-            // Arrange
-            var cns = "server=.\\SQLExpress ; database=TotalAoc - Client Copy; Trusted_Connection=True";
-
-            var xs =
-                Connect(cns, cn => cn.Query<AspNetUser>("select * from aspnet_Users"))
-                .ToList();
-
-            // Act
-
-            // Assert
-            Assert.NotNull(xs);
-            Assert.True(xs.ToList().Count > 0);
-            this._output.WriteLine($@" {  xs[0].UserName   }");
+            //// Arrange
+            //var cns = "server=.\\SQLExpress ; database=TotalAoc - Client Copy; Trusted_Connection=True";
+            //
+            //var xs =
+            //    Connect(cns, cn => cn.Query<AspNetUser>("select * from aspnet_Users"))
+            //    .ToList();
+            //
+            //// Act
+            //
+            //// Assert
+            //Assert.NotNull(xs);
+            //Assert.True(xs.ToList().Count > 0);
+            //this._output.WriteLine($@" {  xs[0].UserName   }");
         }
     }
 }
