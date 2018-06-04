@@ -149,6 +149,24 @@ namespace NufBc
             };
         }
 
+        //public static NufUI.RenderMeta toRenderMeta(ToffeeAppleProduct product)
+        //{
+        //    var renderMeta =
+        //
+        //        new NufUI.RenderMeta 
+        //        {
+        //            ok = code == 200,
+        //            code,
+        //            success = code == 200 ? o : null,
+        //            fail = code == 200 ? null : o,
+        //        };
+        //
+        //    return renderMeta;
+        //
+        //}
+
+
+
         public static Either<string, Ingredients> AddToffee(Ingredients ingredients)
         {
             return new Ingredients

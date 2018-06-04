@@ -10,38 +10,48 @@ namespace Nuf.Controllers
 {
     public class NufBaseController : Controller
     {
-        public ActionResult NotFound(object o)
+        /// equivalent to Mvc.Core Controller.NotFound
+        public ActionResult RenderLeft(object o)
         {
-            var code = 403;
+            var code = 200;
+
+            var left = o as Error;
 
             var renderMeta =
                 new
                 {
-                    ok = code == 200,
+                    ok = false,
                     code,
-                    success = code == 200 ? o : null,
-                    fail = code == 200 ? null : o,
+                    //success = null,
+                    fail = o,
                 };
 
-            Response.StatusCode = code;
+            Response.StatusCode = renderMeta.code;
 
             return Json(renderMeta, JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Ok(object o)
+        /// <summary>
+        /// equivalent to Mvc.Core COntroller.OK
+        /// </summary>
+        /// <param name="o"></param>
+        /// <returns></returns>
+        public ActionResult RenderRight(object o)
         {
             var code = 200;
+
+            var right = o as ToffeeAppleProduct ;
 
             var renderMeta =
                 new
                 {
-                    ok = code == 200,
+                    ok = true,
                     code,
-                    success = code == 200 ? o : null,
-                    fail = code == 200 ? null : o,
+                    success = o,
+                    //fail = null ,
                 };
 
-            Response.StatusCode = code;
+            Response.StatusCode = renderMeta.code;
 
             return Json(renderMeta, JsonRequestBehavior.AllowGet);
         }
@@ -162,68 +172,53 @@ namespace Nuf.Controllers
 
         [HttpGet]
         public JsonResult ToffeeApple(string apple)
-            =>
-                // render the result of the process request
-                JsonRender(
-                    // process the request
-                    CreateToffeeAppleRequestForTextQ(apple)
-                        .Bind(Validate)
-                        .Bind(Prep)
-                        .Bind(AddToffee)
-                        .Bind(Wrap)
-                        .Match(
-                            l => new RenderMeta { Code = 403, Rendition = l },
-                            r => new RenderMeta { Code = 200, Rendition = $@" {r.Apple}" }
-                        )
-                );
+        =>
+            // + :-) Call JsonRender to set the Response, HttpStatus 
+            // - :-( NufController.JsonRender : causes function inside function call rather than a pipeline
+            // render the result of the process request
+            JsonRender(
+                // process the request
+                CreateToffeeAppleRequestForTextQ(apple)
+                    .Bind(Validate)
+                    .Bind(Prep)
+                    .Bind(AddToffee)
+                    .Bind(Wrap)
+                    .Match(
+                        l => new RenderMeta { Code = 403, Rendition = l },
+                        r => new RenderMeta { Code = 200, Rendition = $@" {r.Apple}" }
+                    )
+            );
 
         [HttpGet]
         public JsonResult ToffeeApples(string apples)
-            =>
-                Json(
-                    CreateToffeeAppleRequestForStringQ(apples)
-                        .Bind(Validate)
-                        .Bind(Prep)
-                        .Map(toToffeeAppleProduct)
-                        .Bind(AddToffee)
-                        .Bind(Wrap)
-                        .Match(
-                            l => new RenderMeta { Code = 403, Rendition = l },
-                            r => new RenderMeta { Code = 200, Rendition = $@" pipe = toffeeAppleProductFromAppleCount :: type={r.GetType().Name} :: ApplesCount={r.ApplesCount} :: ProductHistory={r.ProductHistory}" }
-                        )
-                        .SetResponseCode(Response)
-                    , JsonRequestBehavior.AllowGet
-                );
-
-        //[HttpGet]
-        //public JsonResult ToffeeApplesWithError(string apples)
-        //    =>
-        //        Json(
-        //            CreateToffeeAppleRequest(apples)
-        //                .Bind(Validate)
-        //                .Bind(Prep)
-        //                .Map(toProduct)
-        //                //.Bind(AddToffee)
-        //                //.Bind(Wrap)
-        //                .Match(
-        //                    l => new RenderMeta { Code = 403, Rendition = $@" type={l.GetType().Name} :: l.message={l.Message} :: " },
-        //                    r => new RenderMeta { Code = 200, Rendition = $@" type={r.GetType().Name} :: ApplesCount={r.ApplesCount} :: ProductHistory={r.ProductHistory}" }
-        //                )
-        //            //.SetResponseCode(Response)
-        //            , JsonRequestBehavior.AllowGet
-        //        );
+        =>
+            // + :-) ... semi-pipelined
+            // - :-( SetResponseCode side effect inside the pipeline
+            // - :-( controller.Json : causes function inside function call rather than a pipeline
+            Json(
+                CreateToffeeAppleRequestForStringQ(apples)
+                    .Bind(Validate)
+                    .Bind(Prep)
+                    .Map(toToffeeAppleProduct)
+                    .Bind(AddToffee)
+                    .Bind(Wrap)
+                    .Match(
+                        l => new RenderMeta { Code = 403, Rendition = l },
+                        r => new RenderMeta { Code = 200, Rendition = $@" pipe = toffeeAppleProductFromAppleCount :: type={r.GetType().Name} :: ApplesCount={r.ApplesCount} :: ProductHistory={r.ProductHistory}" }
+                    )
+                    .SetResponseCode(Response)
+                , JsonRequestBehavior.AllowGet
+            );
 
         [HttpGet]
         public ActionResult ToffeeApplesWithError(string apples)
-            =>
-                CreateToffeeAppleRequest(apples)
-                    .Bind(Validate)
-                    .Bind(Prep)
-                    .Map(toProduct)
-                    .Match(
-                        NotFound
-                        , Ok
-                    );
+        =>
+            /// yay, fully pipelined, with the use the MVC.Core idea of Controller.NotFound and Controller.OK 
+            ToffeeAppleRequest(apples)
+                .Bind(Validate)
+                .Bind(Prep)
+                .Map(toProduct)
+                .Match(RenderLeft, RenderRight);
 
         #endregion toffeeApple
 
@@ -269,7 +264,7 @@ namespace Nuf.Controllers
             return ingredients;
         }
 
-        private Either<Error, IngredientsByCount> CreateToffeeAppleRequest(string appleCount)
+        private Either<Error, IngredientsByCount> ToffeeAppleRequest(string appleCount)
         {
             Either<Error, IngredientsByCount> ingredients =
                 new IngredientsByCount
